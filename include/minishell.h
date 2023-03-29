@@ -10,11 +10,13 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <termios.h>
+#include <sys/ioctl.h>
 
-typedef struct s_data
+struct s_data
 {
-	char *input;
-	char **paths;
+	char	*input;
+	char 	**paths;
+	int		is;
 
 } t_data;
 
