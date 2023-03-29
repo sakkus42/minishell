@@ -27,7 +27,7 @@ void	exit_free(void)
 		free(t_data.paths[i++]);
 	if (t_data.input)
 		free(t_data.input);
-	system("leaks minishell");
+	// system("leaks minishell");
 	exit(1);
 }
 
@@ -35,17 +35,20 @@ int main(int ac, char *arv[], char *envp[])
 {
 	(void)ac;
 	(void)arv;
-	(void)envp;
 	t_data.paths = ft_split(getenv("PATH"), ':');
+	t_data.env = envp;
 	signal_cntrl();
 	while (1)
 	{
 		t_data.input = readline("minishell$ ");
+		input_parser();
+		cmd_exec();
 		if (t_data.input == NULL)
 		{
 			printf("\rminishell$ exit");
 			exit_free();
 		}
+		builtcmds();
 		if (t_data.is != 1)
 			add_history(t_data.input);
 		free(t_data.input);
