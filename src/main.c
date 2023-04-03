@@ -43,38 +43,11 @@ int main(int ac, char *arv[], char *envp[])
 		t_data.input = readline("minishell$ ");
 		if (t_data.input == NULL)
 		{
-			printf("\rminishell$ exit");
+			printf("\rminishell$ exit\n");
 			exit_free();
 		}
 		input_parser();
 		builtcmds();
-		int id = fork();
-		if (id == 0)
-		{
-			int i = 0;
-			while (t_data.paths[i])
-			{
-				if (find_dir(t_data.paths[i], t_data.inp_parser[0]) == 1)
-					break;
-				i++;
-			}
-			char *path = ft_strjoin(ft_strjoin(t_data.paths[i], "/"), t_data.inp_parser[0]);
-			char **arglist = malloc(sizeof(char**) * 999);
-			i = 0;
-			while (t_data.inp_parser[i])
-			{
-				arglist[i] = t_data.inp_parser[i];
-				// printf("'%s'", arglist[i]);
-				i++;
-			}
-			arglist[i] = NULL;
-			// printf("\n");
-			if (execve(path, arglist, envp) == -1)
-				printf("%s: command not found\n", t_data.inp_parser[0]);
-			exit(1);
-		}
-		else
-			wait(NULL);
 		if (t_data.is != 1)
 			add_history(t_data.input);
 		free(t_data.input);
