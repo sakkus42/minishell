@@ -30,6 +30,6 @@ void	builtcmds(void)
 	if (ft_strncmp("exit", t_data.inp_parser[0], 4) == 0)
 	{
 		printf("exit\n");
-		exit_free();
+		exit_free(1);
 	}
 }

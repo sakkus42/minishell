@@ -28,5 +28,7 @@ void	builtcmds();
 int 	find_dir(char *path, char *cmd);
 void	exit_free();
 void	input_parser();
-int		is_blank_line(char *line);
+void	signal_cntrl();
+void	ctrl_c(int sig);
+void	ctrl_d();
 #endif

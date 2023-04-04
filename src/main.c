@@ -1,56 +1,48 @@
 #include "../include/minishell.h"
 
-void ctrl_c(int sig)
-{
-	(void)sig;
-	ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	rl_on_new_line();
-	t_data.is = 1;
-}
-
-void signal_cntrl()
-{
-	struct termios term;
-
-	signal(SIGINT, ctrl_c);
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_cc[VQUIT] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
-
-void	exit_free(void)
+void	exit_free(int is)
 {
 	int	i;
 
 	i = 0;
-	while (t_data.paths[i])
-		free(t_data.paths[i++]);
-	if (t_data.input)
+	if (t_data.inp_parser && !is && *t_data.input)
+	{
+		while (t_data.inp_parser[i])
+			free(t_data.inp_parser[i++]);
+		free(t_data.inp_parser);
+	}
+	if (t_data.input && is != 1)
 		free(t_data.input);
-	// system("leaks minishell");
-	exit(1);
+	if (is == 1)
+	{
+		// system("leaks minishell");
+		exit(1);
+	}
 }
 
 int main(int ac, char *arv[], char *envp[])
 {
 	(void)ac;
 	(void)arv;
+	char	*home;
+
+	home = getenv("HOME");
+	chdir(home);
 	t_data.paths = ft_split(getenv("PATH"), ':');
 	t_data.env = envp;
 	signal_cntrl();
 	while (1)
 	{
 		t_data.input = readline("minishell$ ");
-		if (t_data.input == NULL)
+		if (!t_data.input)
+			ctrl_d();
+		if (!t_data.is && *t_data.input)
 		{
-			printf("\rminishell$ exit\n");
-			exit_free();
-		}
-		input_parser();
-		builtcmds();
-		if (t_data.is != 1)
+			input_parser();
+			builtcmds();
 			add_history(t_data.input);
-		free(t_data.input);
+		}
+		exit_free(0);
 		t_data.is = 0;
 	}
 	return (0);

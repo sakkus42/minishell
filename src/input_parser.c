@@ -12,16 +12,6 @@ struct input_parser
 	char	quote;
 }parser;
 
-int	is_blank_line(char *line)
-{
-	if (!*line)
-		return (1);
-	if (*line == ' ')
-		return (is_blank_line(line + 1));
-	else
-		return (0);
-}
-
 void	quoute_parser()
 {
 	while(t_data.input[parser.i])
