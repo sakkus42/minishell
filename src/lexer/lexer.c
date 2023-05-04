@@ -115,17 +115,33 @@ int	is_great(int i)
 
 void	red_cntrl(t_lexer *t_lex)
 {
-	if (t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i + 1] == t_lex->input[t_lex->i])
-	{
-		t_lex->i += 2;
-		t_lex->count_token++;
-	}
-	else if (!t_lex->input[t_lex->i + 1])
+	if (t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i] == t_lex->input[t_lex->i + 1])
+		t_lex->i++;
+	if (!t_lex->input[t_lex->i + 1])
 	{
 		printf("bash: syntax error near unexpected token 'newline'");
 		t_lex->ERRFLAG = 1;
 	}
-	else if (t_lex->input[t_lex->i])
+	else if (is_great(t_lex->input[t_lex->i]) && t_lex->input[t_lex->i] == '<')
+	{
+		printf("bash: syntax error near unexpected token '<'");
+		t_lex->ERRFLAG = 1;
+	}
+	else if (!is_great(t_lex->input[t_lex->i]) && t_lex->input[t_lex->i] == '>')
+	{
+		printf("bash: syntax error near unexpected token 'newline'");
+		t_lex->ERRFLAG = 1;
+	}
+	else if (t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i + 1] == t_lex->input[t_lex->i])
+	{
+		t_lex->i += 2;
+		t_lex->count_token++;
+	}
+	else
+	{
+		t_lex->i++;
+		t_lex->count_token++;
+	}
 }
 
 void	skip_operator(t_lexer *t_lex)
