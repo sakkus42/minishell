@@ -13,22 +13,26 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 
-struct s_data
+typedef struct s_data
 {
 	char	*input;
 	char 	**paths;
 	char 	**env;
 	char	**inp_parser;
+	char	**lex_array;
 	int		is;
+	int		LEXFLAG;
 
 } t_data;
 
+t_data g_data;
 
-void	builtcmds();
 int 	find_dir(char *path, char *cmd);
+int		parser();
+char	**lexer();
 void	exit_free();
-void	input_parser();
 void	signal_cntrl();
 void	ctrl_c(int sig);
 void	ctrl_d();
+
 #endif

@@ -2,6 +2,7 @@
 	"files.associations": {
 		"minishell.h": "c",
 		"signal.h": "c",
-		"atomic": "c"
+		"atomic": "c",
+		"unistd.h": "c"
 	}
 }

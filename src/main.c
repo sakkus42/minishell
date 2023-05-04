@@ -5,45 +5,41 @@ void	exit_free(int is)
 	int	i;
 
 	i = 0;
-	if (t_data.inp_parser && !is && *t_data.input)
+	if (g_data.inp_parser && !is && *g_data.input)
 	{
-		while (t_data.inp_parser[i])
-			free(t_data.inp_parser[i++]);
-		free(t_data.inp_parser);
+		while (g_data.inp_parser[i])
+		{
+			free(g_data.inp_parser[i++]);
+		}
+		free(g_data.inp_parser);
 	}
-	if (t_data.input && is != 1)
-		free(t_data.input);
+	if (g_data.input)
+		free(g_data.input);
 	if (is == 1)
-	{
-		// system("leaks minishell");
 		exit(1);
-	}
 }
 
 int main(int ac, char *arv[], char *envp[])
 {
 	(void)ac;
 	(void)arv;
-	char	*home;
-
-	home = getenv("HOME");
-	chdir(home);
-	t_data.paths = ft_split(getenv("PATH"), ':');
-	t_data.env = envp;
+	
+	g_data.paths = ft_split(getenv("PATH"), ':');
+	g_data.env = envp;
 	signal_cntrl();
 	while (1)
 	{
-		t_data.input = readline("minishell$ ");
-		if (!t_data.input)
+		g_data.input = readline("minishell$ ");
+		g_data.LEXFLAG = 0;
+		if (!g_data.input)
 			ctrl_d();
-		if (!t_data.is && *t_data.input)
+		if (!g_data.is && *g_data.input)
 		{
-			input_parser();
-			builtcmds();
-			add_history(t_data.input);
+			lexer();
+			add_history(g_data.input);
 		}
 		exit_free(0);
-		t_data.is = 0;
+		g_data.is = 0;
 	}
 	return (0);
 }

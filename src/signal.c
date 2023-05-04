@@ -2,16 +2,17 @@
 
 void	ctrl_d()
 {
-
-	exit_free(1);
+	write(1, "exit\n", 5);
+	exit(0);
 }
 
 void	ctrl_c(int sig)
 {
 	(void)sig;
+	printf("\033[A");
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	rl_on_new_line();
-	t_data.is = 1;
+	g_data.is = 1;
 }
 
 void signal_cntrl()

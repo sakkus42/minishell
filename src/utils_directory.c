@@ -5,6 +5,7 @@ int	find_dir(char *path, char *cmd)
 {
 	DIR *d;
 	struct dirent *dir;
+	
 	d = opendir(path);
 	if (d) {
 		while ((dir = readdir(d)) != NULL) {

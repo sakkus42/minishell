@@ -1,17 +1,16 @@
 NAME = minishell
 CC = gcc
-FLAGS = -Wall -Wextra -Werror -I./lib/readline/include
-LDFLAGS = -L./lib/readline/lib -lreadline
+FLAGS = -Wall -Wextra -Werror
+LDFLAGS = -lreadline
 LIBFT = libft/libft.a
 SRC = src/main.c \
-	  src/builtcmd.c \
-	  src/input_parser.c\
-	  src/utils_directory.c\
-	  src/signal.c\
+	  src/utils_directory.c \
+	  src/signal.c \
+	  src/lexer/lexer.c \
 
 all: $(NAME)
 
-$(NAME): src/*.c $(LIBFT)
+$(NAME): $(SRC) $(LIBFT)
 	$(CC) $(FLAGS) $(SRC) $(LIBFT) $(LDFLAGS)  -o $(NAME)
 
 $(LIBFT):
@@ -21,3 +20,5 @@ clean:
 	rm -rf minishell
 
 re: clean all
+
+# parser dosyasında herhangi bir değişkliği görmüyor
