@@ -3,6 +3,11 @@
 		"minishell.h": "c",
 		"signal.h": "c",
 		"atomic": "c",
-		"unistd.h": "c"
+		"unistd.h": "c",
+		"__bit_reference": "c",
+		"algorithm": "c",
+		"bitset": "c",
+		"chrono": "c",
+		"unordered_map": "c"
 	}
 }

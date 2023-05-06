@@ -7,6 +7,9 @@ SRC = src/main.c \
 	  src/utils_directory.c \
 	  src/signal.c \
 	  src/lexer/lexer.c \
+	  src/lexer/skip.c \
+	  src/lexer/control.c \
+	  src/lexer/utils.c \
 
 all: $(NAME)
 

@@ -3,14 +3,23 @@
 
 struct s_try
 {
-	void	(*try)(int);
+	void	(*init)(struct s_try*);
+	int i;
+	int len;
+	char *message;
 } try1;
 
-void	add(int i){
-	printf("hello world");
+void	init(struct s_try *tr)
+{
+	tr->i = 0;
+	tr->len = 0;
+	tr->message = "hello struct oop";
 }
 
+
 int main(){
-	try1.try = add;
-	try1.try(2);
+	struct s_try deneme;
+	deneme.init = init;
+	deneme.init(&deneme);
+	printf("%s", deneme.message);
 }
