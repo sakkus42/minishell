@@ -106,36 +106,39 @@ void	skip_cmnd_arg(t_lexer *t_lex)
 	t_lex->count_token++;
 }
 
-int	is_great(int i)
+int	is_great(t_lexer *t_lex)
 {
-	if (i == '>')
+	if (t_lex->input[t_lex->i] == '>')
 		return (1);
 	return (0);
 }
 
+char	skip_space(char *input, int *i)
+{
+	while (input[*i] == ' ')
+		(*i)++;
+	return (input[*i]);
+}
+
 void	red_cntrl(t_lexer *t_lex)
 {
+	printf("ok\n");
 	if (t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i] == t_lex->input[t_lex->i + 1])
 		t_lex->i++;
-	if (!t_lex->input[t_lex->i + 1])
+	if (t_lex->i != 0 && ft_strchr("|>", t_lex->input[t_lex->i - 1]) && !is_great(t_lex))
 	{
-		printf("bash: syntax error near unexpected token 'newline'");
+		printf("bash: syntax error near unexpected token '<'\n");
 		t_lex->ERRFLAG = 1;
 	}
-	else if (is_great(t_lex->input[t_lex->i]) && t_lex->input[t_lex->i] == '<')
+	else if (!t_lex->input[t_lex->i + 1] || !skip_space(t_lex->input, &t_lex->i))
 	{
-		printf("bash: syntax error near unexpected token '<'");
+		printf("bash: syntax error near unexpected token 'newline'\n");
 		t_lex->ERRFLAG = 1;
 	}
-	else if (!is_great(t_lex->input[t_lex->i]) && t_lex->input[t_lex->i] == '>')
+	else if (is_great(t_lex) && t_lex->input[t_lex->i + 1] == '>')
 	{
-		printf("bash: syntax error near unexpected token 'newline'");
+		printf("bash: syntax error near unexpected token '>'\n");
 		t_lex->ERRFLAG = 1;
-	}
-	else if (t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i + 1] == t_lex->input[t_lex->i])
-	{
-		t_lex->i += 2;
-		t_lex->count_token++;
 	}
 	else
 	{
@@ -144,10 +147,30 @@ void	red_cntrl(t_lexer *t_lex)
 	}
 }
 
+void	pipe_cntrl(t_lexer *t_lex)
+{
+	if (t_lex->i == 0 || !t_lex->input[t_lex->i + 1])
+		;
+	else if (!t_lex->input[t_lex->i - 1])
+		;
+	else if (!skip_space(t_lex->input, &t_lex->i))
+		;
+	else
+	{
+		t_lex->i++;
+		t_lex->count_token++;
+		return ;
+	}
+	printf("bash: syntax error near unexpected token '|'\n");
+	t_lex->ERRFLAG = 1;
+}
+
 void	skip_operator(t_lexer *t_lex)
 {
 	if (t_lex->input[t_lex->i] == '<' || t_lex->input[t_lex->i] == '>')
 		red_cntrl(t_lex);
+	if (t_lex->input[t_lex->i] == '|')
+		pipe_cntrl(t_lex);
 }
 
 void	count_token(t_lexer *t_lex)
@@ -156,16 +179,17 @@ void	count_token(t_lexer *t_lex)
 	{
 		if (t_lex->ERRFLAG)
 			break;
-		if (t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"')
+		else if (t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"')
 			skip_quot(t_lex, t_lex->input[t_lex->i]);
-		if (ft_isalpha(t_lex->input[t_lex->i]))
+		else if (!ft_strchr("<>| ", t_lex->input[t_lex->i]))
 			skip_cmnd_arg(t_lex);
-		if (ft_strchr("<>|", t_lex->input[t_lex->i]))
+		else if (ft_strchr("<>|", t_lex->input[t_lex->i]))
 			skip_operator(t_lex);
-		if (!t_lex->is)
+		else
 			t_lex->i++;
 		t_lex->is = 0;
 	}
+	printf("count token:	%d\n", t_lex->count_token);
 }
 
 char	**lexer()
@@ -184,7 +208,6 @@ char	**lexer()
 	count_token(&t_lex);
 	if (t_lex.ERRFLAG)
 		return (NULL);
-	printf("count token:	%d\n", t_lex.count_token);
 	return (t_lex.token);
 }
 
