@@ -37,5 +37,7 @@ int	is_great(t_lexer *t_lex)
 {
 	if (t_lex->input[t_lex->i] == '>')
 		return (1);
-	return (0);
+	if (t_lex->input[t_lex->i] == '<')
+		return (0);
+	return (-1);
 }

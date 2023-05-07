@@ -37,9 +37,12 @@ void	skip_quot(t_lexer *t_lex, char quot)
 		if (t_lex->input[t_lex->i] == quot)
 			t_lex->tmp++;
 		if ((t_lex->input[t_lex->i] && t_lex->input[t_lex->i] == quot
-			&& t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i + 1] == quot)
-			|| (t_lex->input[t_lex->i + 1] && !ft_strchr("< >|", t_lex->input[t_lex->i + 1])))
+			&& t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i + 1] == quot))
 				continue;
+		else if (ft_strchr("< >|", t_lex->input[t_lex->i]) && t_lex->tmp % 2 == 0)
+			break;
+		else if (t_lex->input[t_lex->i + 1] && !ft_strchr("< >|", t_lex->input[t_lex->i + 1]))
+			continue;
 		else if (t_lex->input[t_lex->i] && t_lex->input[t_lex->i] == quot
 			&& t_lex->tmp % 2 == 0)
 		{

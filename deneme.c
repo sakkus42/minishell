@@ -18,8 +18,6 @@ void	init(struct s_try *tr)
 
 
 int main(){
-	struct s_try deneme;
-	deneme.init = init;
-	deneme.init(&deneme);
-	printf("%s", deneme.message);
+	char *str = malloc(sizeof(char));
+	return (0);
 }

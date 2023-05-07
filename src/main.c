@@ -35,10 +35,17 @@ int main(int ac, char *arv[], char *envp[])
 			ctrl_d();
 		if (!g_data.is && *g_data.input)
 		{
-			lexer();
+			char **str = lexer();
+			int i = 0;
+			while (str[i])
+			{
+				printf("%s\n", str[i]);
+				free(str[i]);
+				i++;
+			}
 			add_history(g_data.input);
 		}
-		exit_free(0);
+		// exit_free(0);
 		g_data.is = 0;
 	}
 	return (0);

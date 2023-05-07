@@ -54,17 +54,97 @@ static void	count_token(t_lexer *t_lex)
 	printf("count token:	%d\n", t_lex->count_token);
 }
 
+char	*ft_str_cat(char *dest, char src)
+{
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	if (!dest)
+	{
+		printf("dest:\n");
+		tmp = malloc(sizeof(char) * 2);
+		tmp[0] = src;
+		tmp[1] = '\0';
+	}
+	else
+	{
+		while (dest[i])
+			i++;
+		tmp = malloc(sizeof(char) * i + 2);
+		i = 0;
+		while (dest[i])
+		{
+			tmp[i] = dest[i];
+			i++;
+		}
+		tmp[i++] = src;
+		tmp[i] = '\0';
+		free(dest);
+	}
+	return (tmp);
+}
+
+void	quot_add(t_lexer *t_lex)
+{
+	t_lex->tmp = t_lex->input[t_lex->i];
+	while (t_lex->input[t_lex->i])
+	{
+		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
+		if (t_lex->input[t_lex->i] == t_lex->tmp)
+		{
+			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
+			break;
+		}
+	}
+	if (ft_strchr("< >|", t_lex->input[t_lex->i]) && !t_lex->input[t_lex->i])
+	{
+		t_lex->k++;
+		return ;
+	}
+	else
+	{
+		while (t_lex->input[t_lex->i] && !ft_strchr("< >|", t_lex->input[t_lex->i]))
+			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
+		t_lex->k++;
+	}
+}
+
+void	operator_add(t_lexer *t_lex)
+{
+	if (t_lex->input[t_lex->i] == '|')
+	{
+		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
+		t_lex->k++;
+	}
+	else if (is_great(t_lex) || !is_great(t_lex))
+	{
+		if (t_lex->input[t_lex->i + 1] == t_lex->input[t_lex->i])
+			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
+		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
+		t_lex->k++;
+	}
+}
+
 void	lex_sep(t_lexer *t_lex)
 {
-    t_lex->token = malloc((sizeof(char *) * t_lex->count_token + 1));
     while(t_lex->input[t_lex->i])
     {
-		if
-		// else if (t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"')
-		// 	add_quot(t_lex);
-        t_lex->FLAGPLUS = 0;
+		while (t_lex->input[t_lex->i] && t_lex->input[t_lex->i] == ' ')
+			t_lex->i++;
+		if (t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"')
+			quot_add(t_lex);
+		if (t_lex->input[t_lex->i] && ft_strchr("<>|", t_lex->input[t_lex->i]))
+			operator_add(t_lex);
+		if (t_lex->input[t_lex->i] && !ft_strchr("<>|\"'", t_lex->input[t_lex->i]))
+		{
+			while (t_lex->input[t_lex->i] && t_lex->input[t_lex->i] != ' ' &&
+				!ft_strchr("<>|\"'", t_lex->input[t_lex->i]))
+				t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
+			t_lex->k++;
+		}
     }
-    t_lex->token[t_lex->k + 1] = NULL;
+    t_lex->token[t_lex->k] = NULL;
     return ;
 }
 
@@ -84,10 +164,13 @@ char	**lexer()
 	count_token(&t_lex);
 	if (t_lex.ERRFLAG || !t_lex.count_token)
 		return (NULL);
+	t_lex.token = ft_calloc(sizeof(char *), t_lex.count_token + 1);
+	reset_ver(&t_lex);
+	// printf("reset\n");
 	lex_sep(&t_lex);
 	t_lex.tmp = 0;
 	while (t_lex.token[t_lex.tmp])
-		printf("tokens:	%s\n", t_lex.token[t_lex.tmp++]);
+		printf("func:	%s\n", t_lex.token[t_lex.tmp++]);
 	return (t_lex.token);
 }
 

@@ -15,9 +15,11 @@ typedef struct s_lexer
 	int			i;
 	int			j;
 	int			k;
+	int			count;
 	int			tmp;
 	int			count_token;
 }				t_lexer;
+
 
 int	g_i;
 int		is_great(t_lexer *t_lex);

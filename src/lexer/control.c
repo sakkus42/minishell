@@ -48,6 +48,8 @@ void	pipe_cntrl(t_lexer *t_lex)
 		;
 	else if (!t_lex->input[t_lex->i - 1])
 		;
+	else if (ft_strchr("<>|", t_lex->input[t_lex->i - 1]))
+		;
 	else if (!skip_space(t_lex->input, &t_lex->i))
 		;
 	else
