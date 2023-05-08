@@ -20,12 +20,13 @@ void	red_cntrl(t_lexer *t_lex)
 {
 	if (t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i] == t_lex->input[t_lex->i + 1])
 		t_lex->i++;
+	t_lex->tmp = t_lex->i + 1;
 	if (t_lex->i != 0 && ft_strchr("|>", t_lex->input[t_lex->i - 1]) && !is_great(t_lex))
 	{
 		printf("bash: syntax error near unexpected token '<'\n");
 		t_lex->ERRFLAG = 1;
 	}
-	else if (!t_lex->input[t_lex->i + 1] || !skip_space(t_lex->input, &t_lex->i))
+	else if (!t_lex->input[t_lex->i + 1] || !skip_space(t_lex->input, &t_lex->tmp))
 	{
 		printf("bash: syntax error near unexpected token 'newline'\n");
 		t_lex->ERRFLAG = 1;

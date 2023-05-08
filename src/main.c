@@ -43,9 +43,10 @@ int main(int ac, char *arv[], char *envp[])
 				free(str[i]);
 				i++;
 			}
+			free(str);
 			add_history(g_data.input);
 		}
-		// exit_free(0);
+		exit_free(0);
 		g_data.is = 0;
 	}
 	return (0);

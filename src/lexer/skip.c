@@ -19,11 +19,13 @@ void	skip_cmnd_arg(t_lexer *t_lex)
 	t_lex->count_token++;
 }
 
-char	skip_space(char *input, int *i)
+int	skip_space(char *input, int *i)
 {
 	while (input[*i] == ' ')
 		(*i)++;
-	return (input[*i]);
+	if (input[*i] == '\0')
+		return (0);
+	return (1);
 }
 
 void	skip_quot(t_lexer *t_lex, char quot)
@@ -34,7 +36,10 @@ void	skip_quot(t_lexer *t_lex, char quot)
 	while (t_lex->input[t_lex->i])
 	{
 		t_lex->i++;
-		if (t_lex->input[t_lex->i] == quot)
+		if ((t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"')
+			&& t_lex->input[t_lex->i] != quot && !(t_lex->tmp % 2))
+			t_lex->j++;
+		if (t_lex->input[t_lex->i] == quot && (!t_lex->j || !(t_lex->j % 2)))
 			t_lex->tmp++;
 		if ((t_lex->input[t_lex->i] && t_lex->input[t_lex->i] == quot
 			&& t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i + 1] == quot))

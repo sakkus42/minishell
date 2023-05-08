@@ -10,6 +10,7 @@ SRC = src/main.c \
 	  src/lexer/skip.c \
 	  src/lexer/control.c \
 	  src/lexer/utils.c \
+	  src/lexer/add_token.c \
 
 all: $(NAME)
 

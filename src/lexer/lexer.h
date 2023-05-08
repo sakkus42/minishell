@@ -7,32 +7,32 @@ typedef struct s_lexer
 {
 	char		**token;
 	char		*input;
-	int			*len_array;
 	int			ERRFLAG;
-	int			FLAGPLUS;
 	int			s_quo;
 	int			d_quo;
 	int			i;
 	int			j;
 	int			k;
-	int			count;
 	int			tmp;
 	int			count_token;
 }				t_lexer;
 
-
-int	g_i;
 int		is_great(t_lexer *t_lex);
 int		quo_count(int quo, char *input);
 int		is_valid_quot(t_lexer *t_lex, char quot);
+int		skip_space(char *input, int *i);
 int		*ft_intlcat(int len, int *src, int value);
-char	skip_space(char *input, int *i);
+char	*ft_str_cat(char *dest, char src);
 void	reset_ver(t_lexer *t_lex);
 void	skip_operator(t_lexer *t_lex);
 void	skip_cmnd_arg(t_lexer *t_lex);
 void	skip_quot(t_lexer *t_lex, char quot);
 void	pipe_cntrl(t_lexer *t_lex);
 void	red_cntrl(t_lexer *t_lex);
-
+void	quot_from_quot(t_lexer *t_lex);
+void	add_dolar(t_lexer *t_lex);
+void	quot_add(t_lexer *t_lex);
+void	operator_add(t_lexer *t_lex);
+void	cmnd_add(t_lexer *t_lex);
 
 #endif

@@ -4,19 +4,18 @@ int	quo_count(int quo, char *input)
 {
 	int	i;
 	int	count;
-	int	is;
+	int	diff_quo;
 
 	i = 0;
 	count = 0;
-	is = 0;
+	diff_quo = 0;
 	while (input[i])
 	{
-		if ((input[i] == '\'' || input[i] == '"') && input[i] != quo && !count)
-			is = input[i];
-		else if (input[i] == is)
-			is = 0;
-		if (input[i] == quo && !is)
+		if (quo == input[i] && (!diff_quo || diff_quo % 2 == 0))
 			count++;
+		if ((input[i] == '\'' || input[i] == '"') && input[i] != quo
+			&& (!count || count % 2 == 0))
+			diff_quo++;
 		i++;
 	}
 	return (count);
@@ -30,7 +29,6 @@ void	reset_ver(t_lexer *t_lex)
 	t_lex->tmp = 0;
 	t_lex->count_token = 0;
 	t_lex->ERRFLAG = 0;
-	t_lex->FLAGPLUS = 0;
 }
 
 int	is_great(t_lexer *t_lex)
@@ -40,4 +38,46 @@ int	is_great(t_lexer *t_lex)
 	if (t_lex->input[t_lex->i] == '<')
 		return (0);
 	return (-1);
+}
+
+char	*ft_str_cat(char *dest, char src)
+{
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	if (!dest)
+	{
+		tmp = malloc(sizeof(char) * 2);
+		tmp[0] = src;
+		tmp[1] = '\0';
+		return (tmp);
+	}
+	while (dest[i])
+		i++;
+	tmp = malloc(sizeof(char) * i + 2);
+	i = 0;
+	while (dest[i])
+	{
+		tmp[i] = dest[i];
+		i++;
+	}
+	tmp[i++] = src;
+	tmp[i] = '\0';
+	free(dest);
+	return (tmp);
+}
+
+void	quot_from_quot(t_lexer *t_lex)
+{
+	t_lex->tmp = t_lex->input[t_lex->i];
+	while (t_lex->input[t_lex->i])
+	{
+		if (t_lex->tmp == '"' && t_lex->input[t_lex->i] == '$')
+			add_dolar(t_lex);
+		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
+		if (t_lex->input[t_lex->i] == t_lex->tmp)
+			break;
+	}
+	t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
 }
