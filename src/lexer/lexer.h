@@ -6,6 +6,7 @@
 typedef struct s_lexer
 {
 	char		**token;
+	t_token		*t_res;
 	char		*input;
 	int			ERRFLAG;
 	int			s_quo;
@@ -34,5 +35,6 @@ void	add_dolar(t_lexer *t_lex);
 void	quot_add(t_lexer *t_lex);
 void	operator_add(t_lexer *t_lex);
 void	cmnd_add(t_lexer *t_lex);
+void	linked_add(t_lexer *t_lex, int is);
 
 #endif

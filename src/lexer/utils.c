@@ -70,14 +70,16 @@ char	*ft_str_cat(char *dest, char src)
 
 void	quot_from_quot(t_lexer *t_lex)
 {
-	t_lex->tmp = t_lex->input[t_lex->i];
+	t_lex->tmp = t_lex->input[t_lex->i++];
 	while (t_lex->input[t_lex->i])
 	{
 		if (t_lex->tmp == '"' && t_lex->input[t_lex->i] == '$')
 			add_dolar(t_lex);
-		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
 		if (t_lex->input[t_lex->i] == t_lex->tmp)
+		{
+			t_lex->i++;
 			break;
+		}
+		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
 	}
-	t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
 }

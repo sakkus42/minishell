@@ -38,6 +38,9 @@
 // ls > çalışmamalı
 // "ahsbfjhsdbfjhds"'"'" taha" count token 2 sayıyor
 
+//  echo -n -n -n -n yes -n -n -n
+// 		yes -n -n -nbash-3.2$
+
 static void	count_token(t_lexer *t_lex)
 {
 	while (t_lex->input[t_lex->i])
@@ -72,7 +75,7 @@ void	lex_sep(t_lexer *t_lex)
     return ;
 }
 
-char	**lexer()
+t_token *lexer()
 {
 	t_lexer	t_lex;
 
@@ -90,8 +93,9 @@ char	**lexer()
 		return (NULL);
 	t_lex.token = ft_calloc(sizeof(char *), t_lex.count_token + 1);
 	reset_ver(&t_lex);
+	t_lex.t_res = NULL;
 	lex_sep(&t_lex);
 	free(t_lex.input);
-	return (t_lex.token);
+	free(t_lex.token);
+	return (t_lex.t_res);
 }
-

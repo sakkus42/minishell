@@ -45,17 +45,17 @@ void	red_cntrl(t_lexer *t_lex)
 
 void	pipe_cntrl(t_lexer *t_lex)
 {
-	if (t_lex->i == 0 || !t_lex->input[t_lex->i + 1])
+	t_lex->i++;
+	if (!t_lex->i || !t_lex->input[t_lex->i + 2] || !t_lex->count_token)
 		;
-	else if (!t_lex->input[t_lex->i - 1])
+	else if (!t_lex->input[t_lex->i - 2])
 		;
-	else if (ft_strchr("<>|", t_lex->input[t_lex->i - 1]))
+	else if (ft_strchr("<>|", t_lex->input[t_lex->i - 2]))
 		;
-	else if (!skip_space(t_lex->input, &t_lex->i))
+	else if (!skip_space(t_lex->input, &t_lex->i) || ft_strchr("|<>", t_lex->input[t_lex->i]))
 		;
 	else
 	{
-		t_lex->i++;
 		t_lex->count_token++;
 		return ;
 	}

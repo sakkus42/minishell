@@ -1,23 +1,27 @@
+
+
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-struct s_try
+int toplam(int *x, int *y)
 {
-	void	(*init)(struct s_try*);
-	int i;
-	int len;
-	char *message;
-} try1;
-
-void	init(struct s_try *tr)
-{
-	tr->i = 0;
-	tr->len = 0;
-	tr->message = "hello struct oop";
+	int f = 10;
+	x = &f;
+	printf("toplam : %p\n",x);
+	*x = 60;
+	*y = 20;
+	return *x+*y;
 }
 
+int main()
+{
+	int x =6 ;
+	int y = 10;
+	printf("main : %p\n",&x);
+	int toplam2 = toplam(&x,&y);
+	printf("main : %p\n", &x);
 
-int main(){
-	char *str = malloc(sizeof(char));
-	return (0);
+
 }
