@@ -16,11 +16,17 @@
 typedef struct s_token
 {
 	char *cmnd;
+	char *cmnd_file;
 	int	if_red;
 	int	if_quot;
 	int	if_pipe;
 	struct s_token *next;
 }				t_token;
+
+typedef struct s_cmnd
+{
+	char	*cmnd;
+} t_cmnd;
 
 typedef struct s_data
 {
@@ -35,7 +41,7 @@ typedef struct s_data
 } t_data;
 
 t_data 	g_data;	
-int 	find_dir(char *path, char *cmd);
+int		find_dir(char **path, char *cmd);
 void	exit_free();
 void	signal_cntrl();
 void	ctrl_c(int sig);
