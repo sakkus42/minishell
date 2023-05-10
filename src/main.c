@@ -5,13 +5,10 @@ void	exit_free(int is)
 	int	i;
 
 	i = 0;
-	if (g_data.inp_parser && !is && *g_data.input)
+	while (g_data.t_cmnd)
 	{
-		while (g_data.inp_parser[i])
-		{
-			free(g_data.inp_parser[i++]);
-		}
-		free(g_data.inp_parser);
+		free(g_data.t_cmnd);
+		g_data.t_cmnd = g_data.t_cmnd->next;
 	}
 	if (g_data.input)
 		free(g_data.input);
@@ -39,12 +36,13 @@ void	exxec()
 		return ;
 	}
 	g_data.t_token->cmnd_file = add_path(is);
-	char *arg[] = {g_data.t_token->cmnd, NULL};
 	printf("%s\n", g_data.t_token->cmnd_file);
 	int id = fork();
 	if (id == 0)
 	{
-		execve(g_data.t_token->cmnd_file, arg, g_data.env);
+		is = 0;
+		ft_print_struct(g_data.t_cmnd);
+		execve(g_data.t_token->cmnd_file, g_data.t_cmnd->expand_cmnd, g_data.env);
 		exit(1);
 	}
 	else
@@ -64,19 +62,19 @@ int main(int ac, char *arv[], char *envp[])
 		g_data.input = readline("minishell$ ");
 		g_data.LEXFLAG = 0;
 		if (!g_data.input)
-			ctrl_d();
+			ctrl_d();  
 		if (!g_data.is && *g_data.input)
 		{
 			add_history(g_data.input);
-			g_data.t_token = lexer();
-			t_token *t_iter = g_data.t_token;
+			parser();
 			if (!g_data.t_token)
 				continue;
-			while (t_iter)
-			{
-				printf("%s\n", t_iter->cmnd);
-				t_iter = t_iter->next;
-			}
+			// t_token *t_iter = g_data.t_token;
+			// while (t_iter)
+			// {
+			// 	printf("%s\n", t_iter->cmnd);
+			// 	t_iter = t_iter->next;
+			// }
 			exxec();
 		}
 		exit_free(0);

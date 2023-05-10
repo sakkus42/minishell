@@ -74,6 +74,9 @@ void	linked_add(t_lexer *t_lex, int is)
 	t_token *t_tmp;
 
 	t_tmp = malloc(sizeof(t_token));
+	t_tmp->if_pipe = 0;
+	t_tmp->if_quot = 0;
+	t_tmp->if_red = 0;
 	t_tmp->cmnd = t_lex->token[t_lex->k];
 	if (is == '<' || is == '>')
 		t_tmp->if_red = 1;

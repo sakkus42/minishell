@@ -41,6 +41,9 @@
 //  echo -n -n -n -n yes -n -n -n
 // 		yes -n -n -nbash-3.2$
 
+// ls > | ls
+// ls | > ls
+
 static void	count_token(t_lexer *t_lex)
 {
 	while (t_lex->input[t_lex->i])

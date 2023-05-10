@@ -11,6 +11,7 @@ SRC = src/main.c \
 	  src/lexer/control.c \
 	  src/lexer/utils.c \
 	  src/lexer/add_token.c \
+	  src/lexer/parser.c \
 	  src/utils/linked_list_utils.c \
 
 all: $(NAME)

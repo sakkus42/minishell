@@ -1,0 +1,9 @@
+Makefile
+a.out
+deneme.c
+include
+leak.sh
+libft
+minishell
+sl
+src

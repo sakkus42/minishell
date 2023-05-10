@@ -15,13 +15,9 @@ int toplam(int *x, int *y)
 	return *x+*y;
 }
 
+
 int main()
 {
-	int x =6 ;
-	int y = 10;
-	printf("main : %p\n",&x);
-	int toplam2 = toplam(&x,&y);
-	printf("main : %p\n", &x);
-
-
+	printf("main : %p\n", string());
+	system("leaks a.out");
 }

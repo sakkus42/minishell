@@ -46,7 +46,7 @@ void	red_cntrl(t_lexer *t_lex)
 void	pipe_cntrl(t_lexer *t_lex)
 {
 	t_lex->i++;
-	if (!t_lex->i || !t_lex->input[t_lex->i + 2] || !t_lex->count_token)
+	if (!t_lex->i || !t_lex->input[t_lex->i + 1] || !t_lex->count_token)
 		;
 	else if (!t_lex->input[t_lex->i - 2])
 		;
