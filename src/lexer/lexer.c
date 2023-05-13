@@ -43,7 +43,9 @@
 
 // ls > | ls
 // ls | > ls
+// ls -'a' b
 
+//  echo $PATH$PATH
 static void	count_token(t_lexer *t_lex)
 {
 	while (t_lex->input[t_lex->i])

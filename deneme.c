@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "include/minishell.h"
 
 int toplam(int *x, int *y)
 {
@@ -15,9 +16,14 @@ int toplam(int *x, int *y)
 	return *x+*y;
 }
 
+void	try(char *str)
+{	
+	str = malloc(1000);
+}
 
 int main()
 {
-	printf("main : %p\n", string());
-	system("leaks a.out");
+	char *str;
+	if (ft_strnstr("amk=sad", "amk=", 4))
+		printf("ok\n");
 }

@@ -36,5 +36,6 @@ void	quot_add(t_lexer *t_lex);
 void	operator_add(t_lexer *t_lex);
 void	cmnd_add(t_lexer *t_lex);
 void	linked_add(t_lexer *t_lex, int is);
+void	add_dolar(t_lexer *t_lex);
 
 #endif

@@ -15,8 +15,7 @@
 
 typedef struct s_token
 {
-	char	*cmnd;
-	char	*cmnd_file;
+	char	**cmnd;
 	int		if_red;
 	int		if_quot;
 	int		if_pipe;
@@ -26,6 +25,7 @@ typedef struct s_token
 typedef struct s_cmnd
 {
 	char	**expand_cmnd;
+	char	*cmnd_file;
 	char	*operator;
 	struct	s_cmnd *next;
 } t_cmnd;
@@ -49,7 +49,10 @@ void	ctrl_d();
 void	ft_lstadd_back(t_token **lst, t_token *new);
 void	ft_lstadd_back_t_cmnd(t_cmnd **lst, t_cmnd *new);
 void	ft_print_struct(t_cmnd *t_cmd);
+void	free_token(t_token *t_tok);
+void	exit_free(int is);
 void	parser();
+char	*add_path(int index);
 t_token	*lexer();
-t_data 	g_data;	
+t_data 	g_data;
 #endif

@@ -1,10 +1,9 @@
 NAME = minishell
 CC = gcc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline
 LIBFT = libft/libft.a
 SRC = src/main.c \
-	  src/utils_directory.c \
 	  src/signal.c \
 	  src/lexer/lexer.c \
 	  src/lexer/skip.c \
@@ -12,6 +11,9 @@ SRC = src/main.c \
 	  src/lexer/utils.c \
 	  src/lexer/add_token.c \
 	  src/lexer/parser.c \
+	  src/lexer/add_dolar.c \
+	  src/utils/utils_directory.c \
+	  src/utils/free_all.c \
 	  src/utils/linked_list_utils.c \
 
 all: $(NAME)

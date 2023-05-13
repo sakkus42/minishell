@@ -21,7 +21,7 @@ t_cmnd	*new_node(int count_cmnd)
 	t_cmnd	*t_res;
 
 	t_res = malloc(sizeof(t_cmnd));
-	printf("count_cmnd:	%d\n", count_cmnd + 1);
+	// printf("count_cmnd:	%d\n", count_cmnd + 1);
 	t_res->expand_cmnd = malloc(sizeof(char *) * (count_cmnd + 1));
 	t_res->expand_cmnd[count_cmnd] = NULL;
 	t_res->next = NULL;
@@ -47,10 +47,10 @@ void	split_cmnd(t_token *t_token, t_cmnd **t_cmd)
 		if (!is)
 			t_tmp = split_cmnd2(&i, &is, t_token);
 		if (!t_token->if_pipe && !t_token->if_red)
-			t_tmp->expand_cmnd[i++] = t_token->cmnd;
+			t_tmp->expand_cmnd[i++] = ft_strdup(t_token->cmnd[0]);
 		else
 		{
-			t_tmp->operator = t_token->cmnd;
+			t_tmp->operator = ft_strdup(t_token->cmnd[0]);
 			ft_lstadd_back_t_cmnd(t_cmd, t_tmp);
 			is = 0;
 			i = 0;
@@ -64,10 +64,35 @@ void	split_cmnd(t_token *t_token, t_cmnd **t_cmd)
 	}
 }
 
+void	print_struct(t_token *t_token)
+{
+	while (t_token)
+	{
+		printf("%s\n", t_token->cmnd[0]);
+		t_token = t_token->next;
+	}
+}
+
+void	print_struct_cmnd(t_cmnd *t_cmnd)
+{
+	int i = 0;
+	while (t_cmnd)
+	{
+		i = 0;
+		while (t_cmnd->expand_cmnd[i])
+			printf("%s ", t_cmnd->expand_cmnd[i++]);
+		printf("\n");
+		t_cmnd = t_cmnd->next;
+	}
+}
+
+
+
 void	parser()
 {
 	g_data.t_token = lexer();
 	if (!g_data.t_token)
 		return ;
 	split_cmnd(g_data.t_token, &(g_data.t_cmnd));
+	// print_struct_cmnd(g_data.t_cmnd)
 }

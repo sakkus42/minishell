@@ -50,7 +50,6 @@ void	ft_print_struct(t_cmnd *t_cmd)
 	int i;
 	while (t_cmd)
 	{
-
 		i = 0;
 		while (t_cmd->expand_cmnd[i])
 			printf("%s ", t_cmd->expand_cmnd[i++]);
