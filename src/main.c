@@ -9,19 +9,13 @@ void	run_comand()
 	{
 		printf("bash: %s: command not found\n", g_data.t_cmnd->expand_cmnd[0]);
 		g_data.t_cmnd->cmnd_file = NULL;
+		exit(-1);
 	}
 	else
 	{
 		g_data.t_cmnd->cmnd_file = add_path(is);
-		int id = fork();
-		if (id == 0)
-		{
-			is = 0;
-			execve(g_data.t_cmnd->cmnd_file, g_data.t_cmnd->expand_cmnd, g_data.env);
-			exit(1);
-		}
-		else
-			wait(&id);
+		is = 0;
+		execve(g_data.t_cmnd->cmnd_file, g_data.t_cmnd->expand_cmnd, g_data.env);
 	}
 }
 
@@ -46,7 +40,7 @@ int main(int ac, char *arv[], char *envp[])
 			parser();
 			if (!g_data.t_cmnd)
 				continue;
-			run_comand();
+			exec_cmnd(g_data.t_cmnd);
 		}
 		exit_free(0);
 		g_data.is = 0;

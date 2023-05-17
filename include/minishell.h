@@ -26,13 +26,14 @@ typedef struct s_cmnd
 {
 	char	**expand_cmnd;
 	char	*cmnd_file;
-	char	*operator;
+	int		is_input; 
 	struct	s_cmnd *next;
 } t_cmnd;
 
 typedef struct s_data
 {
 	int		is;
+	int		pipe_count;
 	int		LEXFLAG;
 	char	*input;
 	char 	**paths;

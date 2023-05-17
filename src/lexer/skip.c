@@ -5,7 +5,10 @@ void	skip_operator(t_lexer *t_lex)
 	if (t_lex->input[t_lex->i] == '<' || t_lex->input[t_lex->i] == '>')
 		red_cntrl(t_lex);
 	if (t_lex->input[t_lex->i] == '|')
+	{
+		g_data.pipe_count++;
 		pipe_cntrl(t_lex);
+	}
 }
 
 void	skip_cmnd_arg(t_lexer *t_lex)
