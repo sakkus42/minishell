@@ -26,8 +26,10 @@ typedef struct s_cmnd
 {
 	char	**expand_cmnd;
 	char	*cmnd_file;
-	int		is_input; 
+	int		is_input;
+	int		fd[2];
 	struct	s_cmnd *next;
+	struct	s_cmnd *prev;
 } t_cmnd;
 
 typedef struct s_data
@@ -38,6 +40,7 @@ typedef struct s_data
 	char	*input;
 	char 	**paths;
 	char 	**env;
+	int		fd_bacup[2];
 	t_token	*t_token;
 	t_cmnd	*t_cmnd;
 } t_data;
@@ -53,7 +56,9 @@ void	ft_print_struct(t_cmnd *t_cmd);
 void	free_token(t_token *t_tok);
 void	exit_free(int is);
 void	parser();
-char	*add_path(int index);
+void	exec_cmnd(t_cmnd *t_cmd);
+char	*add_path(int index, char *cmnd);
 t_token	*lexer();
 t_data 	g_data;
+void	print_struct_cmnd(t_cmnd *t_cmnd);
 #endif

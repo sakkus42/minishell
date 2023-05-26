@@ -21,24 +21,27 @@ int	count_cmnd(t_token *t_token)
 	return (count);
 }
 
-t_cmnd	*new_node(int count_cmnd)
+t_cmnd	*new_node(int count_cmnd, t_cmnd *t_prev)
 {
 	t_cmnd	*t_res;
 
 	t_res = malloc(sizeof(t_cmnd));
-	printf("count_cmnd:	%d\n", count_cmnd);
+	// printf("count_cmnd:	%d\n", count_cmnd);
 	t_res->expand_cmnd = malloc(sizeof(char *) * (count_cmnd + 1));
 	t_res->expand_cmnd[count_cmnd] = NULL;
+	pipe(t_res->fd);
 	t_res->next = NULL;
+	t_res->prev = t_prev;
 	return (t_res);
 }
 
 int	is_input(char *c)
 {
 	if (ft_strchr(c, '>'))
-		return (0);
-	else
 		return (1);
+	else if (ft_strchr(c, '<'))
+		return (0);
+	return (2);
 }
 
 void	split_pipe(t_token *t_token, t_cmnd **t_cmd)
@@ -46,6 +49,7 @@ void	split_pipe(t_token *t_token, t_cmnd **t_cmd)
 	t_cmnd	*t_tmp;
 	int		i;
 
+	t_tmp = NULL;
 	while (t_token)
 	{
 		i = 0;
@@ -53,12 +57,12 @@ void	split_pipe(t_token *t_token, t_cmnd **t_cmd)
 			t_token = t_token->next;
 		if (!t_token->if_pipe && !t_token->if_red)
 		{
-			t_tmp = new_node(count_cmnd(t_token));
-			t_tmp->is_input = -1;
+			t_tmp = new_node(count_cmnd(t_token), t_tmp);
+			t_tmp->is_input = 2;
 		}
 		else if (t_token->if_red)
 		{
-			t_tmp = new_node(count_cmnd(t_token));
+			t_tmp = new_node(count_cmnd(t_token), t_tmp);
 			t_tmp->expand_cmnd[i++] = t_token->cmnd[0];
 			t_tmp->is_input = is_input(t_token->cmnd[0]);
 			t_token = t_token->next;
@@ -104,5 +108,5 @@ void	parser()
 		return ;
 	}
 	split_pipe(g_data.t_token, &(g_data.t_cmnd));
-	// print_struct_cmnd(g_data.t_cmnd);
+	print_struct_cmnd(g_data.t_cmnd);
 }

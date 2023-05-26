@@ -57,3 +57,4 @@ void	ft_print_struct(t_cmnd *t_cmd)
 		t_cmd = t_cmd->next;
 	}
 }
+

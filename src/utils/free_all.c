@@ -24,8 +24,8 @@ void	exit_free(int is)
 	while (g_data.t_cmnd)
 	{
 		i = 0;
-		if (g_data.t_cmnd->cmnd_file)
-			free(g_data.t_cmnd->cmnd_file);
+		// if (g_data.t_cmnd->cmnd_file)
+		// 	free(g_data.t_cmnd->cmnd_file);
 		// printf("ok\n");
 		free(g_data.t_cmnd->expand_cmnd);
 		t_tmp = g_data.t_cmnd->next;

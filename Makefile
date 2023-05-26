@@ -15,6 +15,7 @@ SRC = src/main.c \
 	  src/utils/utils_directory.c \
 	  src/utils/free_all.c \
 	  src/utils/linked_list_utils.c \
+	  src/exec/exec_cmnd.c \
 
 all: $(NAME)
 

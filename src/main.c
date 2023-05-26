@@ -1,23 +1,6 @@
 #include "../include/minishell.h"
 
-void	run_comand()
-{
-	int	is;
 
-	is = find_dir(g_data.paths, g_data.t_cmnd->expand_cmnd[0]);
-	if (is == -1)
-	{
-		printf("bash: %s: command not found\n", g_data.t_cmnd->expand_cmnd[0]);
-		g_data.t_cmnd->cmnd_file = NULL;
-		exit(-1);
-	}
-	else
-	{
-		g_data.t_cmnd->cmnd_file = add_path(is);
-		is = 0;
-		execve(g_data.t_cmnd->cmnd_file, g_data.t_cmnd->expand_cmnd, g_data.env);
-	}
-}
 
 int main(int ac, char *arv[], char *envp[])
 {

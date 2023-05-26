@@ -29,13 +29,13 @@ int	find_dir(char **path, char *cmd)
 	return (-1);
 }
 
-char	*add_path(int index)
+char	*add_path(int index, char *cmnd)
 {
 	char	*res;
 	char	*tmp;
 
 	tmp = ft_strjoin(g_data.paths[index], "/");
-	res = ft_strjoin(tmp, g_data.t_token->cmnd[0]);
+	res = ft_strjoin(tmp, cmnd);
 	free(tmp);
 	return (res);
 }
