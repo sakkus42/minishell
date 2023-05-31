@@ -13,6 +13,8 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
+#include <errno.h>
+
 
 typedef struct s_token
 {
@@ -42,11 +44,15 @@ typedef struct s_data
 	char	*input;
 	char 	**paths;
 	char 	**env;
+	char	path[4096];
+	char	*env_var;
 	t_token	*t_token;
 	t_cmnd	*t_cmnd;
 } t_data;
 
 int		find_dir(char **path, char *cmd);
+int		built_in_ctl(char *str);
+int		ft_strcmp(const char *s1, const char *s2);
 void	exit_free();
 void	signal_cntrl();
 void	ctrl_c(int sig);
@@ -58,8 +64,10 @@ void	free_token(t_token *t_tok);
 void	exit_free(int is);
 void	parser();
 void	exec_cmnd(t_cmnd *t_cmd);
-char	*add_path(int index, char *cmnd);
+char	*add_path(int index, char *cmnd, char **paths);
+void	init_program(char **envp);
+void	ft_builtins(char **cmnd);
+void	print_struct_cmnd(t_cmnd *t_cmnd);
 t_token	*lexer();
 t_data 	g_data;
-void	print_struct_cmnd(t_cmnd *t_cmnd);
 #endif

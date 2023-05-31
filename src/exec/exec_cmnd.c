@@ -44,34 +44,48 @@ void	close_unnecessary_fd(t_cmnd *t_cmd)
 		close(t_cmd->prev->fd[0]);
 }
 
-void	execve_run(t_cmnd *t_cmd)
+void	file_add(char **file, char **paths, char *expand_cmnd)
 {
-	int		id;
-	int		index;
-	char	*file;
+	int	index;
 
-	index = find_dir(g_data.paths, t_cmd->expand_cmnd[0]);
-	if (index == -1)
+	index = find_dir(paths, expand_cmnd);
+	if (index == -1 && !built_in_ctl(expand_cmnd))
 	{
-		printf("minishell: %s: command not found\n", t_cmd->expand_cmnd[0]);
+		printf("1minishell: %s: command not found\n", expand_cmnd);
 		g_data.exit_status = 127;
+		*file = NULL;
 		return ;
 	}
-	file = add_path(index, t_cmd->expand_cmnd[0]);
+	*file = add_path(index, expand_cmnd, paths);
+}
+
+void	execve_run(t_cmnd *t_cmd, char **paths)
+{
+	int		id;
+	char	*file;
+
+	if (ft_strnstr(t_cmd->expand_cmnd[0], "./", 2))
+		file_add(&file, paths, t_cmd->expand_cmnd[0] + 2);
+	else
+		file_add(&file, paths, t_cmd->expand_cmnd[0]);
 	id = fork();
 	if (id == 0)
 	{
 		dup2_scale(t_cmd);
 		close(t_cmd->fd[0]);
 		close(t_cmd->fd[1]);
-		execve(file, t_cmd->expand_cmnd, g_data.env);
+		if (built_in_ctl(t_cmd->expand_cmnd[0]))
+			ft_builtins(t_cmd->expand_cmnd);
+		else
+			execve(file, t_cmd->expand_cmnd, g_data.env);
 		exit(0);
 	}
 	close_unnecessary_fd(t_cmd);
 	waitpid(id, &(g_data.exit_status), 0);
 	if (WIFEXITED(g_data.exit_status))
 		g_data.exit_status = WEXITSTATUS(g_data.exit_status);
-	free(file);
+	if (file)
+		free(file);
 }
 
 void	output(t_cmnd *t_cmd)
@@ -110,25 +124,33 @@ void	heredoc(t_cmnd *t_cmd)
 
 void	exec_cmnd(t_cmnd *t_cmd)
 {
+	char	**paths;
+
 	if (!g_data.pipe_count && get_size_t_cmd(g_data.t_cmnd) == 1)
 	{
-		execve_run(g_data.t_cmnd);
+		if (built_in_ctl(t_cmd->expand_cmnd[0]))
+			ft_builtins(t_cmd->expand_cmnd);
+		else if (ft_strnstr(t_cmd->expand_cmnd[0], "./", 2))
+		{
+			paths = ft_split(getenv("PWD"), ':');
+			execve_run(g_data.t_cmnd, paths);
+			free(paths[0]);
+			free(paths);
+		}
+		else
+			execve_run(g_data.t_cmnd, g_data.paths);
 		return ;
 	}
 	while (t_cmd)
 	{
 		if (t_cmd->is_input == 2)
-			execve_run(t_cmd);
+		{
+			execve_run(t_cmd, g_data.paths);
+		}
 		else if (t_cmd->is_input == 0)
 			output(t_cmd);
-		else if (t_cmd->is_input == 1 && !ft_strncmp(t_cmd->expand_cmnd[0], "<", ft_strlen(t_cmd->expand_cmnd[0])))
-		{
-			t_cmd = t_cmd->next;
-			continue;
-		}
 		else
 			heredoc(t_cmd);
-
 		t_cmd = t_cmd->next;
 	}
 	close_all(g_data.t_cmnd); 

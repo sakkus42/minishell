@@ -11,6 +11,8 @@
 		"get_next_line_bonus.h": "c",
 		"history.h": "c",
 		"stdlib.h": "c",
-		"locale": "c"
+		"locale": "c",
+		"unistd.h": "c",
+		"__node_handle": "c"
 	}
 }

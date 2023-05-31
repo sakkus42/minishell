@@ -15,7 +15,18 @@ SRC = src/main.c \
 	  src/utils/utils_directory.c \
 	  src/utils/free_all.c \
 	  src/utils/linked_list_utils.c \
+	  src/utils/is_builtin.c\
+	  src/utils/ft_strcmp.c\
+	  src/utils/init.c\
 	  src/exec/exec_cmnd.c \
+	  src/builtin/export.c	\
+	  src/builtin/unset.c	\
+	  src/builtin/builtins.c \
+	  src/builtin/cd.c \
+	  src/builtin/environment_utils.c \
+	  src/builtin/environment.c \
+	  src/builtin/free_double.c \
+	  src/builtin/keyvals.c  \
 
 all: $(NAME)
 

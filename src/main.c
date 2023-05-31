@@ -6,8 +6,8 @@ int main(int ac, char *arv[], char *envp[])
 	(void)arv;
 	
 	g_data.paths = ft_split(getenv("PATH"), ':');
-	g_data.env = envp;
 	// chdir(getenv("HOME"));
+	init_program(envp);
 	signal_cntrl();
 	while (1)
 	{
