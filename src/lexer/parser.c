@@ -38,9 +38,9 @@ t_cmnd	*new_node(int count_cmnd, t_cmnd *t_prev)
 int	is_input(char *c)
 {
 	if (ft_strchr(c, '>'))
-		return (1);
-	else if (ft_strchr(c, '<'))
 		return (0);
+	else if (ft_strchr(c, '<'))
+		return (1);
 	return (2);
 }
 

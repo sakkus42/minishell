@@ -34,7 +34,8 @@ void	operator_add(t_lexer *t_lex)
 		linked_add(t_lex, '|');
 		t_lex->k++;
 	}
-	else if (is_great(t_lex) || !is_great(t_lex))
+	else if (is_great(t_lex) || (!is_great(t_lex) &&
+			t_lex->input[t_lex->i + 1] == t_lex->input[t_lex->i]))
 	{
 		if (t_lex->input[t_lex->i + 1] == t_lex->input[t_lex->i])
 			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
@@ -42,6 +43,8 @@ void	operator_add(t_lexer *t_lex)
 		linked_add(t_lex, '<');
 		t_lex->k++;
 	}
+	else if (!is_great(t_lex))
+		t_lex->i++;
 }
 
 void	cmnd_add(t_lexer *t_lex)

@@ -95,7 +95,11 @@ t_token *lexer()
 	reset_ver(&t_lex);
 	count_token(&t_lex);
 	if (t_lex.ERRFLAG || !t_lex.count_token)
+	{
+		free(t_lex.input);
+		free(t_lex.token);
 		return (NULL);
+	}
 	t_lex.token = ft_calloc(sizeof(char *), t_lex.count_token + 1);
 	reset_ver(&t_lex);
 	t_lex.t_res = NULL;

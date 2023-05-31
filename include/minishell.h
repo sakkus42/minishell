@@ -12,6 +12,7 @@
 #include <readline/history.h>
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <fcntl.h>
 
 typedef struct s_token
 {
@@ -37,10 +38,10 @@ typedef struct s_data
 	int		is;
 	int		pipe_count;
 	int		LEXFLAG;
+	int		exit_status;
 	char	*input;
 	char 	**paths;
 	char 	**env;
-	int		fd_bacup[2];
 	t_token	*t_token;
 	t_cmnd	*t_cmnd;
 } t_data;

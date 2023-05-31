@@ -1,7 +1,5 @@
 #include "../include/minishell.h"
 
-
-
 int main(int ac, char *arv[], char *envp[])
 {
 	(void)ac;
@@ -9,7 +7,7 @@ int main(int ac, char *arv[], char *envp[])
 	
 	g_data.paths = ft_split(getenv("PATH"), ':');
 	g_data.env = envp;
-	chdir(getenv("HOME"));
+	// chdir(getenv("HOME"));
 	signal_cntrl();
 	while (1)
 	{
@@ -21,11 +19,12 @@ int main(int ac, char *arv[], char *envp[])
 		{
 			add_history(g_data.input);
 			parser();
-			if (!g_data.t_cmnd)
-				continue;
-			exec_cmnd(g_data.t_cmnd);
+			if (g_data.t_cmnd)
+				exec_cmnd(g_data.t_cmnd);
+			exit_free(0);
 		}
-		exit_free(0);
+		else
+			exit_free(-1);
 		g_data.is = 0;
 	}
 	return (0);
