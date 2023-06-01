@@ -31,8 +31,10 @@ void	exit_free(int is)
 			g_data.t_cmnd = t_tmp;
 		}
 	}
-	if (g_data.input)
-		free(g_data.input);
+	if (g_data.input && !g_data.heredoc_flag)
+		free(g_data.input[0]);
 	if (is == 1)
+	{
 		exit(1);
+	}
 }

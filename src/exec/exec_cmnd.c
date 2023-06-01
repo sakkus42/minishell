@@ -73,6 +73,7 @@ void	execve_run(t_cmnd *t_cmd, char **paths)
 	if (id == 0)
 	{
 		dup2_scale(t_cmd);
+		g_data.id = 1;
 		close(t_cmd->fd[0]);
 		close(t_cmd->fd[1]);
 		if (built_in_ctl(t_cmd->expand_cmnd[0]))
@@ -83,6 +84,7 @@ void	execve_run(t_cmnd *t_cmd, char **paths)
 	}
 	close_unnecessary_fd(t_cmd);
 	waitpid(id, &(g_data.exit_status), 0);
+	g_data.id = 0;
 	if (WIFEXITED(g_data.exit_status))
 		g_data.exit_status = WEXITSTATUS(g_data.exit_status);
 	if (file)
@@ -119,8 +121,29 @@ void	output(t_cmnd *t_cmd)
 
 void	heredoc(t_cmnd *t_cmd)
 {
-	(void)t_cmd;
-	return ;
+	int		is;
+	
+	is = 1;
+	while (ft_strcmp(t_cmd->expand_cmnd[1], g_data.input[0]))
+	{
+		g_data.heredoc_flag = 1;
+		if (g_data.input[0])
+			free(g_data.input[0]);
+		g_data.input[0] = readline("heredoc>");
+		if (!g_data.heredoc_flag)
+		{
+			g_data.heredoc_flag = 1;
+			return ;
+		}
+		if (ft_strcmp(t_cmd->expand_cmnd[1], g_data.input[0]))
+		{
+			ft_putstr_fd(g_data.input[0], t_cmd->fd[1]);
+			ft_putstr_fd("\n", t_cmd->fd[1]);
+		}
+	}
+	g_data.heredoc_flag = 0;
+	close(t_cmd->fd[1]);
+	t_cmd->input_fd = t_cmd->fd[0];
 }
 
 int	is_directory(char *expand_cmnd)
@@ -153,7 +176,11 @@ int	input(t_cmnd *t_cmd)
 		t_cmd->input_fd = fd;
 	}
 	else if (!ft_strcmp(t_cmd->expand_cmnd[0], "<<"))
+	{
 		heredoc(t_cmd);
+		if (g_data.heredoc_flag)
+			return (0);
+	}
 	else
 	{
 		printf("minishell: %s: No such file or directory\n", t_cmd->expand_cmnd[1]);

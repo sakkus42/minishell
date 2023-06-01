@@ -84,14 +84,14 @@ t_token *lexer()
 {
 	t_lexer	t_lex;
 
-	t_lex.s_quo = quo_count('\'', g_data.input);
-	t_lex.d_quo = quo_count('"', g_data.input);
+	t_lex.s_quo = quo_count('\'', g_data.input[0]);
+	t_lex.d_quo = quo_count('"', g_data.input[0]);
 	if (t_lex.s_quo % 2 != 0 || t_lex.d_quo % 2 != 0)
 	{
 		printf("missing quote\n");
 		return (NULL);
 	}
-	t_lex.input = ft_strdup(g_data.input);
+	t_lex.input = ft_strdup(g_data.input[0]);
 	reset_ver(&t_lex);
 	count_token(&t_lex);
 	if (t_lex.ERRFLAG || !t_lex.count_token)

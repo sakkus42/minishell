@@ -40,13 +40,14 @@ typedef struct s_data
 {
 	int		is;
 	int		pipe_count;
-	int		LEXFLAG;
+	int		heredoc_flag;
 	int		exit_status;
-	char	*input;
+	char	**input;
 	char 	**paths;
 	char 	**env;
 	char	path[4096];
 	char	*env_var;
+	int		id;
 	t_token	*t_token;
 	t_cmnd	*t_cmnd;
 } t_data;
@@ -71,4 +72,6 @@ void	ft_builtins(char **cmnd);
 void	print_struct_cmnd(t_cmnd *t_cmnd);
 t_token	*lexer();
 t_data 	g_data;
+
+void	func();
 #endif

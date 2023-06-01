@@ -9,15 +9,17 @@ int main(int ac, char *arv[], char *envp[])
 	// chdir(getenv("HOME"));
 	init_program(envp);
 	signal_cntrl();
+	g_data.input = malloc(sizeof(char**));
+	g_data.id = 0;
 	while (1)
 	{
-		g_data.input = readline("minishell$ ");
-		g_data.LEXFLAG = 0;
-		if (!g_data.input)
+		g_data.input[0] = readline("minishell$ ");
+		g_data.heredoc_flag = 0;
+		if (!g_data.input[0])
 			ctrl_d();  
-		if (!g_data.is && *g_data.input)
+		if (!g_data.is && **g_data.input)
 		{
-			add_history(g_data.input);
+			add_history(g_data.input[0]);
 			parser();
 			if (g_data.t_cmnd)
 				exec_cmnd(g_data.t_cmnd);
