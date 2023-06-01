@@ -1,6 +1,5 @@
 #include "exec.h"
 
-
 int	get_size_t_cmd(t_cmnd *t_cmd)
 {
 	if (!t_cmd)
@@ -20,15 +19,17 @@ void	close_all(t_cmnd *t_cmd)
 
 void	dup2_scale(t_cmnd *t_cmd)
 {
-	if (t_cmd->next && t_cmd->prev)
+	if (t_cmd->next && t_cmd->prev && t_cmd->next->input_fd == -1)
 	{
 		dup2(t_cmd->prev->fd[0], 0);
 		dup2(t_cmd->fd[1], 1);
 	}
-	else if(t_cmd->next)
+	else if(t_cmd->next && t_cmd->next->input_fd == -1)
 		dup2(t_cmd->fd[1], 1);
 	else if (t_cmd->prev)
 		dup2(t_cmd->prev->fd[0], 0);
+	if (t_cmd->next && t_cmd->next->input_fd != -1)
+		dup2(t_cmd->next->input_fd, 0);
 }
 
 void	close_unnecessary_fd(t_cmnd *t_cmd)
@@ -51,7 +52,7 @@ void	file_add(char **file, char **paths, char *expand_cmnd)
 	index = find_dir(paths, expand_cmnd);
 	if (index == -1 && !built_in_ctl(expand_cmnd))
 	{
-		printf("1minishell: %s: command not found\n", expand_cmnd);
+		printf("minishell: %s: command not found\n", expand_cmnd);
 		g_data.exit_status = 127;
 		*file = NULL;
 		return ;
@@ -122,6 +123,45 @@ void	heredoc(t_cmnd *t_cmd)
 	return ;
 }
 
+int	is_directory(char *expand_cmnd)
+{
+	DIR	*d;
+
+	d = opendir(expand_cmnd);
+	if (d)
+		closedir(d);
+	return (d != NULL);
+}
+
+int	input(t_cmnd *t_cmd)
+{
+	int	fd;
+	int	open_flag;
+
+	if (!ft_strcmp(t_cmd->expand_cmnd[0], "<") && !access(t_cmd->expand_cmnd[1], F_OK))
+	{
+		if (is_directory(t_cmd->expand_cmnd[1]))
+			open_flag = O_DIRECTORY;
+		else
+			open_flag = O_RDWR;
+		fd = open(t_cmd->expand_cmnd[1], open_flag);
+		if (fd == -1)
+		{
+			printf("minishell: %s:permission denied\n", t_cmd->expand_cmnd[1]);
+			return (0);
+		}
+		t_cmd->input_fd = fd;
+	}
+	else if (!ft_strcmp(t_cmd->expand_cmnd[0], "<<"))
+		heredoc(t_cmd);
+	else
+	{
+		printf("minishell: %s: No such file or directory\n", t_cmd->expand_cmnd[1]);
+		return (0);
+	}
+	return (1);
+}
+
 void	exec_cmnd(t_cmnd *t_cmd)
 {
 	char	**paths;
@@ -143,14 +183,15 @@ void	exec_cmnd(t_cmnd *t_cmd)
 	}
 	while (t_cmd)
 	{
-		if (t_cmd->is_input == 2)
+		if (t_cmd->next && t_cmd->next->is_input == 1)
 		{
-			execve_run(t_cmd, g_data.paths);
+			if(!input(t_cmd->next))
+				break;
 		}
+		if (t_cmd->is_input == 2)
+			execve_run(t_cmd, g_data.paths);
 		else if (t_cmd->is_input == 0)
 			output(t_cmd);
-		else
-			heredoc(t_cmd);
 		t_cmd = t_cmd->next;
 	}
 	close_all(g_data.t_cmnd); 

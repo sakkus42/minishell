@@ -29,6 +29,7 @@ t_cmnd	*new_node(int count_cmnd, t_cmnd *t_prev)
 	// printf("count_cmnd:	%d\n", count_cmnd);
 	t_res->expand_cmnd = malloc(sizeof(char *) * (count_cmnd + 1));
 	t_res->expand_cmnd[count_cmnd] = NULL;
+	t_res->input_fd = -1;
 	pipe(t_res->fd);
 	t_res->next = NULL;
 	t_res->prev = t_prev;
@@ -108,5 +109,5 @@ void	parser()
 		return ;
 	}
 	split_pipe(g_data.t_token, &(g_data.t_cmnd));
-	print_struct_cmnd(g_data.t_cmnd);
+	// print_struct_cmnd(g_data.t_cmnd);
 }

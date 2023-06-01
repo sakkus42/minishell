@@ -13,8 +13,8 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
-#include <errno.h>
 
+#include <errno.h>	
 
 typedef struct s_token
 {
@@ -30,6 +30,7 @@ typedef struct s_cmnd
 	char	**expand_cmnd;
 	char	*cmnd_file;
 	int		is_input;
+	int		input_fd;
 	int		fd[2];
 	struct	s_cmnd *next;
 	struct	s_cmnd *prev;
