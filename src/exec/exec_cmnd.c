@@ -62,18 +62,16 @@ void	file_add(char **file, char **paths, char *expand_cmnd)
 
 void	execve_run(t_cmnd *t_cmd, char **paths)
 {
-	int		id;
 	char	*file;
 
 	if (ft_strnstr(t_cmd->expand_cmnd[0], "./", 2))
 		file_add(&file, paths, t_cmd->expand_cmnd[0] + 2);
 	else
 		file_add(&file, paths, t_cmd->expand_cmnd[0]);
-	id = fork();
-	if (id == 0)
+	g_data.id = fork();
+	if (g_data.id == 0)
 	{
 		dup2_scale(t_cmd);
-		g_data.id = 1;
 		close(t_cmd->fd[0]);
 		close(t_cmd->fd[1]);
 		if (built_in_ctl(t_cmd->expand_cmnd[0]))
@@ -83,7 +81,7 @@ void	execve_run(t_cmnd *t_cmd, char **paths)
 		exit(0);
 	}
 	close_unnecessary_fd(t_cmd);
-	waitpid(id, &(g_data.exit_status), 0);
+	waitpid(g_data.id, &(g_data.exit_status), 0);
 	g_data.id = 0;
 	if (WIFEXITED(g_data.exit_status))
 		g_data.exit_status = WEXITSTATUS(g_data.exit_status);
