@@ -1,7 +1,19 @@
-#ifndef BUILTIN_H
-#define BUILTIN_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/01 17:00:17 by ydegerli          #+#    #+#             */
+/*   Updated: 2023/06/07 13:30:56 by ydegerli         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#ifndef BUILTIN_H
+# define BUILTIN_H
+
+# include "../../include/minishell.h"
 
 int		built_in_ctl(char *str);
 char	*new_str(char *str, char *new);
@@ -21,5 +33,6 @@ void	print_export(void);
 void	set_key_and_value(char **key, char **value, int *i);
 void	print_env(char **str);
 void	ft_unset(char **env, char *str);
+int		getting_number_in_exit(char *str);
 
 #endif

@@ -28,8 +28,11 @@ t_cmnd	*new_node(int count_cmnd, t_cmnd *t_prev)
 	t_res = malloc(sizeof(t_cmnd));
 	// printf("count_cmnd:	%d\n", count_cmnd);
 	t_res->expand_cmnd = malloc(sizeof(char *) * (count_cmnd + 1));
+	t_res->expand_cmnd_lower = malloc(sizeof(char *) * (count_cmnd + 1));
 	t_res->expand_cmnd[count_cmnd] = NULL;
+	t_res->expand_cmnd_lower[count_cmnd] = NULL;
 	t_res->input_fd = -1;
+	t_res->id = -1;
 	pipe(t_res->fd);
 	t_res->next = NULL;
 	t_res->prev = t_prev;
@@ -64,13 +67,15 @@ void	split_pipe(t_token *t_token, t_cmnd **t_cmd)
 		else if (t_token->if_red)
 		{
 			t_tmp = new_node(count_cmnd(t_token), t_tmp);
-			t_tmp->expand_cmnd[i++] = t_token->cmnd[0];
+			t_tmp->expand_cmnd[i] = t_token->cmnd[0];
+			t_tmp->expand_cmnd_lower[i++] = ft_strdup(t_token->cmnd[0]);
 			t_tmp->is_input = is_input(t_token->cmnd[0]);
 			t_token = t_token->next;
 		}
 		while (t_token && !t_token->if_pipe && !t_token->if_red)
 		{
-			t_tmp->expand_cmnd[i++] = t_token->cmnd[0];
+			t_tmp->expand_cmnd[i] = t_token->cmnd[0];
+			t_tmp->expand_cmnd_lower[i++] = ft_strdup(t_token->cmnd[0]);
 			t_token = t_token->next;
 		}
 		ft_lstadd_back_t_cmnd(t_cmd, t_tmp);
@@ -94,6 +99,10 @@ void	print_struct_cmnd(t_cmnd *t_cmnd)
 		i = 0;
 		while (t_cmnd->expand_cmnd[i])
 			printf("%s ", t_cmnd->expand_cmnd[i++]);
+		printf("\n--------lower-----\n");
+		i = 0;
+		while (t_cmnd->expand_cmnd_lower[i])
+			printf("%s ", t_cmnd->expand_cmnd_lower[i++]);
 		printf("\n");
 		t_cmnd = t_cmnd->next;
 	}
@@ -109,5 +118,5 @@ void	parser()
 		return ;
 	}
 	split_pipe(g_data.t_token, &(g_data.t_cmnd));
-	// print_struct_cmnd(g_data.t_cmnd);
+	upper_to_lower(g_data.t_cmnd);
 }

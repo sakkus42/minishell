@@ -17,3 +17,13 @@ int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return (0);
 }
+
+int size_double(char **str)
+{
+	int i = 0;
+	while (str[i])
+	{
+		i++;
+	}
+	return (i);
+}

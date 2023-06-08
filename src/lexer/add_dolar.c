@@ -8,18 +8,19 @@ static void	add_env_value(t_lexer *t_lex, char *env_name)
 	int		i;
 	char	**hay;
 
+
 	i = 0;
 	env_value = 0;
 	while (g_data.env[i])
 	{
+		if (!ft_strchr(g_data.env[i], '=') && !g_data.env[i + 1])
+			return;
 		hay = ft_split(g_data.env[i], '=');
 		if(ft_strnstr(hay[0], env_name, ft_strlen(env_name)))
 			env_value = ft_strdup(hay[1]);
 		free(hay[0]);
 		free(hay[1]);
 		free(hay);
-		if (env_value)
-			printf("env value:%s\n", env_value);
 		if (env_value)
 			break;
 		i++;
@@ -36,7 +37,6 @@ void	add_dolar(t_lexer *t_lex)
 {
 	char	*tmp;
 	char	*exit_status;
-
 	if (t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i + 1] == '?')
 	{
 		t_lex->i += 2;

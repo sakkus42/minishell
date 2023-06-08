@@ -1,20 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   environment.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/01 16:57:35 by ydegerli          #+#    #+#             */
+/*   Updated: 2023/06/08 14:18:00 by ydegerli         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtin.h"
 
 void	add_env(char *keyval, char **tmp, int find)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if (find == 0)
 	{
-		while (g_data.env[++i])
+		while (g_data.env[i])
+		{
 			tmp[i] = ft_strdup(g_data.env[i]);
+			i++;
+		}
 		tmp[i++] = ft_strdup(keyval);
 	}
 	else
 		add_env_success(keyval, &tmp, &i);
 	free_double_pointer(&g_data.env);
-	tmp[i] = 0;
+	tmp[i] = NULL;
 }
 
 char	*get_env(char *key)
@@ -49,10 +64,8 @@ void	del_env(char *keyval, char **tmp, int find)
 	i = -1;
 	j = 0;
 	if (find == 0)
-	{
 		while (g_data.env[++i])
 			tmp[i] = ft_strdup(g_data.env[i]);
-	}
 	else
 	{
 		while (g_data.env[++i])
@@ -73,15 +86,13 @@ void	del_env(char *keyval, char **tmp, int find)
 
 void	update_env(char *keyval, int state)
 {
-	char **tmp;
-	int find;
-	int i;
+	char	**tmp;
+	int		find;
+	int		i;
 
 	find = 0;
 	i = -1;
-	//state = 1, find = 1, i = strlen(path), oldpwd durumunda
-	set_keys(keyval, &find, &i); //iki key de old olduğu durumda find 1 olur,
-									// i'de dizin uzunluğu kadar olur.
+	set_keys(keyval, &find, &i);
 	if (state == 1 && find == 0)
 		i++;
 	else if (state == -1 && find != 0)
@@ -92,4 +103,5 @@ void	update_env(char *keyval, int state)
 	else if (state == -1)
 		del_env(keyval, tmp, find);
 	g_data.env = tmp;
+	printf("g_data size:	%d\ni:	%d\n", size_double(g_data.env), i);
 }

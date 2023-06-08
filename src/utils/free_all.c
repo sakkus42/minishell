@@ -14,6 +14,24 @@ void	free_token(t_token *t_tok)
 	}
 }
 
+void	free_lower_string(t_cmnd *t_cmd)
+{
+	int	i;
+
+	while (t_cmd)
+	{
+		i = 0;
+		while (t_cmd->expand_cmnd_lower[i])
+		{
+			free(t_cmd->expand_cmnd_lower[i]);
+			i++;
+		}
+		if (t_cmd->expand_cmnd_lower)
+			free(t_cmd->expand_cmnd_lower);
+		t_cmd = t_cmd->next;
+	}
+}
+
 void	exit_free(int is)
 {
 	int	i;
@@ -21,6 +39,7 @@ void	exit_free(int is)
 	
 	if (is != -1)
 	{
+		free_lower_string(g_data.t_cmnd);
 		free_token(g_data.t_token);
 		while (g_data.t_cmnd)
 		{
@@ -35,6 +54,7 @@ void	exit_free(int is)
 		free(g_data.input[0]);
 	if (is == 1)
 	{
+		printf("exit\n");
 		exit(1);
 	}
 }

@@ -70,6 +70,9 @@ char	*ft_str_cat(char *dest, char src)
 
 void	quot_from_quot(t_lexer *t_lex)
 {
+	int	tmp;
+
+	tmp = t_lex->i;
 	t_lex->tmp = t_lex->input[t_lex->i++];
 	while (t_lex->input[t_lex->i])
 	{
@@ -77,6 +80,8 @@ void	quot_from_quot(t_lexer *t_lex)
 			add_dolar(t_lex);
 		if (t_lex->input[t_lex->i] == t_lex->tmp)
 		{
+			if (t_lex->i - tmp == 1)
+				t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], 0);
 			t_lex->i++;
 			break;
 		}

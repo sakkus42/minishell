@@ -1,17 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/01 16:57:20 by ydegerli          #+#    #+#             */
+/*   Updated: 2023/06/08 14:17:49 by ydegerli         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtin.h"
 
-char *new_str(char *str, char *news)
+char	*new_str(char *str, char *news)
 {
-	int j;
-	int x;
+	int	j;
+	int	x;
 
 	x = 1;
 	j = 0;
 	news = malloc(sizeof(char) * (ft_strlen(str)));
 	while (str[x])
 		news[j++] = str[x++];
+	free(news);
 	return (news);
 }
+
 int	ft_chrcmp(char c1, char c2)
 {
 	if (c1 == c2)
@@ -21,10 +35,12 @@ int	ft_chrcmp(char c1, char c2)
 
 void	ft_unset(char **env, char *str)
 {
-	int	i;
-	char dollar;
-	char *new;
+	int		i;
+	char	dollar;
+	char	*new;
 
+	if (!str)
+		return ;
 	i = 0;
 	(void)env;
 	dollar = '$';
@@ -32,12 +48,11 @@ void	ft_unset(char **env, char *str)
 	new = new_str(str, new);
 	if (ft_chrcmp(dollar, str[0]))
 	{
-		while(env[i])
+		while (env[i])
 		{
-			if(ft_strcmp(new, env[i]) == 0)
+			if (ft_strcmp(new, env[i]) == 0)
 				update_env(env[i], -1);
 			i++;
 		}
 	}
-
 }

@@ -11,12 +11,15 @@ int main(int ac, char *arv[], char *envp[])
 	signal_cntrl();
 	g_data.input = malloc(sizeof(char**));
 	g_data.id = 0;
+	g_data.executor_flag = 0;
+	g_data.input_flag = 0;
+	g_data.echo = -1;
 	while (1)
 	{
 		g_data.input[0] = readline("minishell$ ");
 		g_data.heredoc_flag = 0;
-		if (!g_data.input[0])
-			ctrl_d();  
+		if (!g_data.input[0] && !g_data.is)
+			ctrl_d();
 		if (!g_data.is && **g_data.input)
 		{
 			add_history(g_data.input[0]);

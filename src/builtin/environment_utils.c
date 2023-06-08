@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   environment_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/01 16:57:29 by ydegerli          #+#    #+#             */
+/*   Updated: 2023/06/01 17:09:12 by ydegerli         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtin.h"
 
 void	set_pwds(char *old_dir, int find)
@@ -8,7 +20,7 @@ void	set_pwds(char *old_dir, int find)
 	i = 0;
 	while (g_data.env[i])
 	{
-		if(ft_strncmp(g_data.env[i], "OLDPWD", 6) == 0 && find != 0)
+		if (ft_strncmp(g_data.env[i], "OLDPWD", 6) == 0 && find != 0)
 		{
 			free(g_data.env[i]);
 			g_data.env[i] = ft_strjoin("OLDPWD=", old_dir);

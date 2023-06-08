@@ -56,11 +56,14 @@ void	cmnd_add(t_lexer *t_lex)
 		}
 		if (t_lex->input[t_lex->i] == '$')
 			add_dolar(t_lex);
-		if (t_lex->input[t_lex->i] != ' ')
+		if (t_lex->input[t_lex->i] && t_lex->input[t_lex->i] != ' ')
 			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
 	}
-	linked_add(t_lex, 0);
-	t_lex->k++;
+	if (t_lex->token[t_lex->k])
+	{
+		linked_add(t_lex, 0);
+		t_lex->k++;
+	}
 }
 
 void	linked_add(t_lexer *t_lex, int is)

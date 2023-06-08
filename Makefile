@@ -27,6 +27,7 @@ SRC = src/main.c \
 	  src/builtin/environment.c \
 	  src/builtin/free_double.c \
 	  src/builtin/keyvals.c  \
+	  src/builtin/exit_utils.c  \
 
 all: $(NAME)
 

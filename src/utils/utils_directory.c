@@ -1,6 +1,5 @@
 #include "../../include/minishell.h"
 
-//dosyanın ismini utils_directory yaprtım
 int	find_dir(char **path, char *cmd)
 {
 	DIR *d;
@@ -38,4 +37,29 @@ char	*add_path(int index, char *cmnd, char **paths)
 	res = ft_strjoin(tmp, cmnd);
 	free(tmp);
 	return (res);
+}
+
+void	upper_to_lower(t_cmnd *t_cmd)
+{
+	int		i;
+	int		k;
+
+	while (t_cmd)
+	{
+		i = 0;
+		k = 0;
+		while(t_cmd->expand_cmnd_lower[i] && t_cmd->expand_cmnd_lower[i][k])
+		{
+			if (t_cmd->expand_cmnd_lower[i][k] >= 'A' && t_cmd->expand_cmnd_lower[i][k] <= 'Z')
+				t_cmd->expand_cmnd_lower[i][k] = t_cmd->expand_cmnd_lower[i][k] + 32;
+			if (t_cmd->expand_cmnd[i] && t_cmd->expand_cmnd_lower[i][k + 1] == '\0')
+			{
+				i++;
+				k = 0;
+				continue;
+			}
+			k++;
+		}
+		t_cmd = t_cmd->next;
+	}
 }
