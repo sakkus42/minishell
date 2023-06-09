@@ -6,7 +6,7 @@
 /*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:57:05 by ydegerli          #+#    #+#             */
-/*   Updated: 2023/06/08 14:18:19 by ydegerli         ###   ########.fr       */
+/*   Updated: 2023/06/01 17:17:05 by ydegerli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,9 @@ void	print_export(void)
 
 void	do_export(char **str)
 {
-	char	*env_var;
-
-	env_var = str[1];
+	g_data.env_var = str[1];
 	if (str[1] == NULL)
 		print_export();
 	else
-		update_env(env_var, 1);	
+		update_env(g_data.env_var, 1);
 }

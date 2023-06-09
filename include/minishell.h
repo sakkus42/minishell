@@ -50,6 +50,7 @@ typedef struct s_data
 	char 	**paths;
 	char 	**env;
 	char	path[4096];
+	char	*env_var;
 	int		echo;
 	int		id;
 	t_token	*t_token;
@@ -73,7 +74,6 @@ void	init_program(char **envp);
 void	ft_builtins(char **cmnd);
 void	print_struct_cmnd(t_cmnd *t_cmnd);
 void	upper_to_lower(t_cmnd *t_cmd);
-int size_double(char **str);
 t_token	*lexer();
 t_data 	g_data;
 
