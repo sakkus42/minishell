@@ -28,7 +28,7 @@ void	reset_ver(t_lexer *t_lex)
 	t_lex->k = 0;
 	t_lex->tmp = 0;
 	t_lex->count_token = 0;
-	t_lex->ERRFLAG = 0;
+	t_lex->errflag = 0;
 }
 
 int	is_great(t_lexer *t_lex)
@@ -83,8 +83,9 @@ void	quot_from_quot(t_lexer *t_lex)
 			if (t_lex->i - tmp == 1)
 				t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], 0);
 			t_lex->i++;
-			break;
+			break ;
 		}
-		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], t_lex->input[t_lex->i++]);
+		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k],
+				t_lex->input[t_lex->i++]);
 	}
 }

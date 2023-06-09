@@ -6,7 +6,7 @@
 /*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:56:21 by ydegerli          #+#    #+#             */
-/*   Updated: 2023/06/07 13:23:35 by ydegerli         ###   ########.fr       */
+/*   Updated: 2023/06/09 14:11:17 by ydegerli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	ft_builtins(char **cmnd)
 	else if (ft_strcmp(cmnd[0], "export") == 0)
 		do_export(cmnd);
 	else if (ft_strcmp(cmnd[0], "unset") == 0)
-		ft_unset(g_data.env, cmnd[1]);
+		ft_unset(cmnd);
 	else if (ft_strcmp(cmnd[0], "exit") == 0)
 	{
 		printf("exit\n");

@@ -19,6 +19,9 @@ SRC = src/main.c \
 	  src/utils/ft_strcmp.c\
 	  src/utils/init.c\
 	  src/exec/exec_cmnd.c \
+	  src/exec/utils.c \
+	  src/exec/dup2_scale.c \
+	  src/exec/input_output.c \
 	  src/builtin/export.c	\
 	  src/builtin/unset.c	\
 	  src/builtin/builtins.c \

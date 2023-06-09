@@ -2,7 +2,7 @@
 
 void	free_token(t_token *t_tok)
 {
-	t_token *t_tmp;
+	t_token	*t_tmp;
 
 	while (t_tok)
 	{
@@ -34,9 +34,9 @@ void	free_lower_string(t_cmnd *t_cmd)
 
 void	exit_free(int is)
 {
-	int	i;
-	t_cmnd *t_tmp;
-	
+	t_cmnd	*t_tmp;
+	int		i;
+
 	if (is != -1)
 	{
 		free_lower_string(g_data.t_cmnd);

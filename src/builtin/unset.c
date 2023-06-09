@@ -6,7 +6,7 @@
 /*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:57:20 by ydegerli          #+#    #+#             */
-/*   Updated: 2023/06/01 17:19:18 by ydegerli         ###   ########.fr       */
+/*   Updated: 2023/06/09 13:18:59 by ydegerli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,7 @@ int	ft_chrcmp(char c1, char c2)
 	return (0);
 }
 
-void	ft_unset(char **env, char *str)
+void	ft_unset(char **str)
 {
-	int		i;
-	char	dollar;
-	char	*new;
-
-	if (!str)
-		return ;
-	i = 0;
-	(void)env;
-	dollar = '$';
-	new = NULL;
-	new = new_str(str, new);
-	if (ft_chrcmp(dollar, str[0]))
-	{
-		while (env[i])
-		{
-			if (ft_strcmp(new, env[i]) == 0)
-				update_env(env[i], -1);
-			i++;
-		}
-	}
+	update_env(*str, -1);
 }

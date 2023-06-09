@@ -33,7 +33,6 @@ void	ft_lstadd_back(t_token **lst, t_token *new)
 		*lst = new;
 }
 
-
 void	ft_lstadd_back_t_cmnd(t_cmnd **lst, t_cmnd *new)
 {
 	t_cmnd	*last;
@@ -47,7 +46,8 @@ void	ft_lstadd_back_t_cmnd(t_cmnd **lst, t_cmnd *new)
 
 void	ft_print_struct(t_cmnd *t_cmd)
 {
-	int i;
+	int	i;
+
 	while (t_cmd)
 	{
 		i = 0;
@@ -57,4 +57,3 @@ void	ft_print_struct(t_cmnd *t_cmd)
 		t_cmd = t_cmd->next;
 	}
 }
-

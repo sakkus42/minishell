@@ -1,19 +1,11 @@
 #include "../include/minishell.h"
 
-int main(int ac, char *arv[], char *envp[])
+int	main(int ac, char *arv[], char *envp[])
 {
 	(void)ac;
 	(void)arv;
-	
-	g_data.paths = ft_split(getenv("PATH"), ':');
-	// chdir(getenv("HOME"));
 	init_program(envp);
 	signal_cntrl();
-	g_data.input = malloc(sizeof(char**));
-	g_data.id = 0;
-	g_data.executor_flag = 0;
-	g_data.input_flag = 0;
-	g_data.echo = -1;
 	while (1)
 	{
 		g_data.input[0] = readline("minishell$ ");

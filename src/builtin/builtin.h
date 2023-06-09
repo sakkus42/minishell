@@ -6,7 +6,7 @@
 /*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 17:00:17 by ydegerli          #+#    #+#             */
-/*   Updated: 2023/06/07 13:30:56 by ydegerli         ###   ########.fr       */
+/*   Updated: 2023/06/09 14:37:29 by ydegerli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void	do_export(char **str);
 void	print_export(void);
 void	set_key_and_value(char **key, char **value, int *i);
 void	print_env(char **str);
-void	ft_unset(char **env, char *str);
+void	ft_unset(char **str);
 int		getting_number_in_exit(char *str);
+int		first_ltter(char *str);
+int		ft_chrcmp(char c1, char c2);
+void	var_chck(char *str);
 
 #endif

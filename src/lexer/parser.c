@@ -15,7 +15,7 @@ int	count_cmnd(t_token *t_token)
 		if (!t_token->if_pipe && !t_token->if_red)
 			count++;
 		else
-			break;
+			break ;
 		t_token = t_token->next;
 	}
 	return (count);
@@ -26,7 +26,6 @@ t_cmnd	*new_node(int count_cmnd, t_cmnd *t_prev)
 	t_cmnd	*t_res;
 
 	t_res = malloc(sizeof(t_cmnd));
-	// printf("count_cmnd:	%d\n", count_cmnd);
 	t_res->expand_cmnd = malloc(sizeof(char *) * (count_cmnd + 1));
 	t_res->expand_cmnd_lower = malloc(sizeof(char *) * (count_cmnd + 1));
 	t_res->expand_cmnd[count_cmnd] = NULL;
@@ -46,6 +45,17 @@ int	is_input(char *c)
 	else if (ft_strchr(c, '<'))
 		return (1);
 	return (2);
+}
+
+t_token	*split_pipe2(t_token *t_token, t_cmnd *t_tmp, int i)
+{
+	while (t_token && !t_token->if_pipe && !t_token->if_red)
+	{
+		t_tmp->expand_cmnd[i] = t_token->cmnd[0];
+		t_tmp->expand_cmnd_lower[i++] = ft_strdup(t_token->cmnd[0]);
+		t_token = t_token->next;
+	}
+	return (t_token);
 }
 
 void	split_pipe(t_token *t_token, t_cmnd **t_cmd)
@@ -72,43 +82,12 @@ void	split_pipe(t_token *t_token, t_cmnd **t_cmd)
 			t_tmp->is_input = is_input(t_token->cmnd[0]);
 			t_token = t_token->next;
 		}
-		while (t_token && !t_token->if_pipe && !t_token->if_red)
-		{
-			t_tmp->expand_cmnd[i] = t_token->cmnd[0];
-			t_tmp->expand_cmnd_lower[i++] = ft_strdup(t_token->cmnd[0]);
-			t_token = t_token->next;
-		}
+		t_token = split_pipe2(t_token, t_tmp, i);
 		ft_lstadd_back_t_cmnd(t_cmd, t_tmp);
 	}
 }
 
-void	print_struct(t_token *t_token)
-{
-	while (t_token)
-	{
-		printf("%s\n", t_token->cmnd[0]);
-		t_token = t_token->next;
-	}
-}
-
-void	print_struct_cmnd(t_cmnd *t_cmnd)
-{
-	int i = 0;
-	while (t_cmnd)
-	{
-		i = 0;
-		while (t_cmnd->expand_cmnd[i])
-			printf("%s ", t_cmnd->expand_cmnd[i++]);
-		printf("\n--------lower-----\n");
-		i = 0;
-		while (t_cmnd->expand_cmnd_lower[i])
-			printf("%s ", t_cmnd->expand_cmnd_lower[i++]);
-		printf("\n");
-		t_cmnd = t_cmnd->next;
-	}
-}
-
-void	parser()
+void	parser(void)
 {
 	g_data.pipe_count = 0;
 	g_data.t_token = lexer();
@@ -119,4 +98,5 @@ void	parser()
 	}
 	split_pipe(g_data.t_token, &(g_data.t_cmnd));
 	upper_to_lower(g_data.t_cmnd);
+	ft_print_struct(g_data.t_cmnd);
 }

@@ -6,7 +6,7 @@
 /*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:57:35 by ydegerli          #+#    #+#             */
-/*   Updated: 2023/06/01 17:11:17 by ydegerli         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:18:00 by ydegerli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,20 @@ void	add_env(char *keyval, char **tmp, int find)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if (find == 0)
 	{
-		while (g_data.env[++i])
+		while (g_data.env[i])
+		{
 			tmp[i] = ft_strdup(g_data.env[i]);
+			i++;
+		}
 		tmp[i++] = ft_strdup(keyval);
 	}
 	else
 		add_env_success(keyval, &tmp, &i);
 	free_double_pointer(&g_data.env);
-	tmp[i] = 0;
+	tmp[i] = NULL;
 }
 
 char	*get_env(char *key)

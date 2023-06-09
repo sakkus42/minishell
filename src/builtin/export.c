@@ -6,11 +6,38 @@
 /*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:57:05 by ydegerli          #+#    #+#             */
-/*   Updated: 2023/06/01 17:17:05 by ydegerli         ###   ########.fr       */
+/*   Updated: 2023/06/09 14:42:33 by ydegerli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+
+
+
+int	first_ltter(char *str)
+{
+	int		i;
+
+	if (str)
+	{
+		if ((!ft_isalpha(str[0]) && str[0] != '_') || str[0] == '=')
+		{
+			printf("minishell: export: `%s': not a valid identifier\n", str);
+			return (0);
+		}
+		i = 1;
+		while (str[i] && str[i] != '=')
+		{
+			if (!ft_isalnum(str[i]) && str[i] != '_')
+			{
+				printf("minishell: export: `%s': not a valid identifier\n", str);
+				return (0);
+			}
+			i++;
+		}
+	}
+	return (1);
+}
 
 void	set_key_and_value(char **key, char **value, int *i)
 {
@@ -48,9 +75,16 @@ void	print_export(void)
 
 void	do_export(char **str)
 {
-	g_data.env_var = str[1];
+	int		i;
+	char	*env_var;
+
+	i = 1;
+	env_var = str[1];
 	if (str[1] == NULL)
 		print_export();
 	else
-		update_env(g_data.env_var, 1);
+	{
+		if (first_ltter(str[i]) && str)
+			update_env(env_var, 1);
+	}
 }

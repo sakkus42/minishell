@@ -6,7 +6,7 @@ void	ctrl_d(void)
 	exit(0);
 }
 
-void	put_nl()
+void	put_nl(void)
 {
 	printf("\033[A");
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
@@ -14,8 +14,9 @@ void	put_nl()
 	g_data.is = 1;
 }
 
-void	ctrl_c()
+void	ctrl_c(int sig)
 {
+	(void)sig;
 	if (g_data.heredoc_flag)
 		g_data.heredoc_flag = 0;
 	if (ttyname(g_data.id) && !g_data.executor_flag && !g_data.input_flag)
@@ -26,7 +27,7 @@ void	sighandler_quit(int sig)
 {
 	(void)sig;
 	if (!g_data.input_flag)
-		return;
+		return ;
 	else if (ttyname(g_data.id) && !g_data.executor_flag)
 		printf("Quit: 3\n");
 }
