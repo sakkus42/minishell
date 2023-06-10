@@ -2,7 +2,7 @@
 
 void	execve_run2(t_cmnd *t_cmd)
 {
-	ft_builtins(t_cmd->expand_cmnd_lower);
+	ft_builtins(t_cmd->expand_cmnd_lower, t_cmd->expand_cmnd);
 	g_data.exit_status = 0;
 }
 
@@ -20,10 +20,11 @@ void	execve_run(t_cmnd *t_cmd, char **paths)
 	if (t_cmd->id == 0)
 	{
 		dup2_scale(t_cmd);
+		close_all(g_data.t_cmnd);
 		close(t_cmd->fd[0]);
 		close(t_cmd->fd[1]);
 		if (built_in_ctl(t_cmd->expand_cmnd_lower[0]))
-			ft_builtins(t_cmd->expand_cmnd_lower);
+			ft_builtins(t_cmd->expand_cmnd_lower, t_cmd->expand_cmnd);
 		else if (execve(file, t_cmd->expand_cmnd, g_data.env) == -1 && \
 				!is_executor(t_cmd->expand_cmnd))
 			printf("minishell: %s: command not found\n", t_cmd->expand_cmnd[0]);

@@ -12,79 +12,136 @@
 
 #include "builtin.h"
 
-
-
-int	first_ltter(char *str)
+int		size_env(char **env)
 {
+	int	res;
+
+	res = 0;
+	while (env[res])
+		res++;
+	return (res);
+}
+
+int	repeat_index(char *env_name, char *cmd)
+{
+	char 	*env;
 	int		i;
 
-	if (str)
+	i = 0;
+	while (g_data.env[i])
 	{
-		if ((!ft_isalpha(str[0]) && str[0] != '_') || str[0] == '=')
-		{
-			printf("minishell: export: `%s': not a valid identifier\n", str);
-			return (0);
-		}
-		i = 1;
-		while (str[i] && str[i] != '=')
-		{
-			if (!ft_isalnum(str[i]) && str[i] != '_')
-			{
-				printf("minishell: export: `%s': not a valid identifier\n", str);
-				return (0);
-			}
-			i++;
-		}
-	}
-	return (1);
-}
-
-void	set_key_and_value(char **key, char **value, int *i)
-{
-	(*key) = ft_substr(g_data.env[*i], 0, ft_strchr(g_data.env[*i], '=')
-			- (g_data.env[*i]));
-	if (ft_strchr(g_data.env[*i], '='))
-		(*value) = ft_substr(g_data.env[*i],
-				ft_strlen(ft_strchr(g_data.env[*i], '=') + 250),
-				ft_strlen(g_data.env[*i]));
-	else
-		(*value) = NULL;
-}
-
-void	print_export(void)
-{
-	char	**env;
-	char	*s;
-
-	env = g_data.env;
-	while (*env)
-	{
-		s = ft_strchr(*env, '=');
-		write(1, "declare -x ", 11);
-		if (s)
-		{
-			write(1, *env, s - *env + 1);
-			printf("%c%s", '"', s + 1);
-			printf("%c\n", '"');
-		}
+		if (ft_strchr(g_data.env[i], '='))
+			env = ft_substr(g_data.env[i], 0, ft_strchr(g_data.env[i], '=') - g_data.env[i]); 
 		else
-			printf("%s\n", *env);
-		env++;
+			env = ft_strdup(g_data.env[i]);
+		if (!ft_strcmp(env, env_name))
+		{
+			free(env);
+			if ((ft_strchr(g_data.env[i], '=') && ft_strchr(cmd, '='))
+					|| !ft_strchr(g_data.env[i], '='))
+				return (i);
+			else
+				return (-2);
+		}
+		free(env);
+		i++;
 	}
+	return (-1);
 }
 
-void	do_export(char **str)
+int size_expand_len(char *cmd)
 {
-	int		i;
-	char	*env_var;
+	int		res;
+	char	*env_name;
 
-	i = 1;
-	env_var = str[1];
-	if (str[1] == NULL)
-		print_export();
+	if (ft_strchr(cmd, '='))
+		env_name = ft_substr(cmd, 0, ft_strchr(cmd, '=') - cmd);
+	else
+		env_name = ft_strdup(cmd);
+	res = repeat_index(env_name, cmd);
+	free(env_name);
+	return (res);
+}
+
+void	add_env_new(char *cmd)
+{
+	char	**tmp;
+	int		len;
+	int		i;
+	int		repeat_index;
+
+	len = size_env(g_data.env);
+	repeat_index = size_expand_len(cmd);
+	printf("len: %d\n", len);
+	if (repeat_index == -1)
+		tmp = malloc(sizeof(char *) * (len + 2));
+	else if (repeat_index == -2)
+		return ;
 	else
 	{
-		if (first_ltter(str[i]) && str)
-			update_env(env_var, 1);
+		free (g_data.env[repeat_index]);
+		g_data.env[repeat_index] = ft_strdup(cmd);
+		return ;
+	}
+	i = 0;
+	while (g_data.env[i])
+	{
+		tmp[i] = ft_strdup(g_data.env[i]);
+		i++;
+	}
+	tmp[i++] = ft_strdup(cmd);
+	tmp[i] = NULL;
+	printf("ok1\n");
+	free_double_pointer(&g_data.env);
+	printf("ok2\n");
+	g_data.env = tmp;
+}
+
+void	print_export(char *str)
+{
+	int		i;
+	int		k;
+	char	*is;
+
+	i = 0;
+	k = 0;
+	while (g_data.env[i])
+	{
+		is = ft_strchr(g_data.env[i], '=');
+		k = 0;
+		printf("%s", str);
+		while (g_data.env[i][k])
+		{
+			if (k != 0 && g_data.env[i][k - 1] == '=' && str && is)
+				printf("\"");
+			printf("%c", g_data.env[i][k]);
+			if (!g_data.env[i][k + 1] && str && is)
+				printf("\"");
+			k++;
+		}
+		if (g_data.env[i][k - 1] == '=')
+				printf("\"");
+		printf("\n");
+		i++;
+	}
+	
+}
+
+void	do_export(char **cmnds)
+{
+	int	i;
+
+	if (is_invalid_arg(cmnds) != -1)
+	{
+		printf("minishell: export: `%s': not a valid identifier\n", cmnds[is_invalid_arg(cmnds)]);
+		return ;
+	}
+	if (!cmnds[1])
+		print_export("declare -x ");
+	else
+	{
+		i = 1;
+		while (cmnds[i])
+			add_env_new(cmnds[i++]);
 	}
 }

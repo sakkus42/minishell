@@ -29,7 +29,7 @@ void	update_env(char *keyval, int state);
 void	add_env_success(char *keyval, char ***tmp, int *i);
 void	set_keys(char *keyval, int *find, int *i);
 void	do_export(char **str);
-void	print_export(void);
+void	print_export(char *str);
 void	set_key_and_value(char **key, char **value, int *i);
 void	print_env(char **str);
 void	ft_unset(char **str);
@@ -37,5 +37,10 @@ int		getting_number_in_exit(char *str);
 int		first_ltter(char *str);
 int		ft_chrcmp(char c1, char c2);
 void	var_chck(char *str);
+void	do_export(char **cmnds);
+void	add_env(char *keyval, char **tmp, int find);
+int		repeat_index(char *env_name, char *cmd);
+int		size_env(char **env);
+int		is_invalid_arg(char **str);
 
 #endif

@@ -70,9 +70,10 @@ void	parser();
 void	exec_cmnd(t_cmnd *t_cmd);
 char	*add_path(int index, char *cmnd, char **paths);
 void	init_program(char **envp);
-void	ft_builtins(char **cmnd);
+void	ft_builtins(char **cmnd, char **cmnd_upper);
 void	upper_to_lower(t_cmnd *t_cmd);
-int size_double(char **str);
+int		size_double(char **str);
+int		is_env(char *str);
 t_token	*lexer();
 t_data 	g_data;
 

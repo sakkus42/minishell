@@ -67,7 +67,7 @@ void	ft_echo(char **arg)
 	}
 }
 
-void	ft_builtins(char **cmnd)
+void	ft_builtins(char **cmnd, char **cmnd_upper)
 {
 	int		nbr;
 
@@ -83,9 +83,9 @@ void	ft_builtins(char **cmnd)
 	else if (ft_strcmp(cmnd[0], "env") == 0)
 		print_env(g_data.env);
 	else if (ft_strcmp(cmnd[0], "export") == 0)
-		do_export(cmnd);
+		do_export(cmnd_upper);
 	else if (ft_strcmp(cmnd[0], "unset") == 0)
-		ft_unset(cmnd);
+		ft_unset(cmnd_upper);
 	else if (ft_strcmp(cmnd[0], "exit") == 0)
 	{
 		printf("exit\n");

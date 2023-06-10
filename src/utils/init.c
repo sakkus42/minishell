@@ -8,10 +8,13 @@ static void	init_env(char **envp)
 	while (envp[i])
 		i++;
 	g_data.env = malloc(sizeof(char *) * (i + 1));
-	i = -1;
-	while (envp[++i])
+	i = 0;
+	while (envp[i])
+	{
 		g_data.env[i] = ft_strdup(envp[i]);
-	g_data.env[i] = 0;
+		i++;
+	}
+	g_data.env[i] = NULL;
 }
 
 void	init_program(char **envp)
