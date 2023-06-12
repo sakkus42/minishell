@@ -15,14 +15,13 @@ void	execve_run(t_cmnd *t_cmd, char **paths)
 		execve_run2(t_cmd);
 		return ;
 	}
-	file_add(&file, paths, t_cmd);
+	file = NULL;
 	t_cmd->id = fork();
 	if (t_cmd->id == 0)
 	{
+		file_add(&file, paths, t_cmd);
 		dup2_scale(t_cmd);
 		close_all(g_data.t_cmnd);
-		close(t_cmd->fd[0]);
-		close(t_cmd->fd[1]);
 		if (built_in_ctl(t_cmd->expand_cmnd_lower[0]))
 			ft_builtins(t_cmd->expand_cmnd_lower, t_cmd->expand_cmnd);
 		else if (execve(file, t_cmd->expand_cmnd, g_data.env) == -1 && \
@@ -54,13 +53,48 @@ void	execute_run(t_cmnd *t_cmd)
 	free(path);
 }
 
+void	get_paths()
+{
+	int		index;
+	char	**path;
+
+	if (g_data.paths)
+	{
+		index = 0;
+		while (g_data.paths[index])
+			free(g_data.paths[index++]);
+		free(g_data.paths);
+	}
+	index = is_env("PATH");
+	printf("index:	%d\n", index);
+	if (index == -1)
+	{
+		g_data.paths = NULL;
+		return ;
+	}
+	path = ft_split(g_data.env[index], '=');
+	g_data.paths = ft_split(path[1], ':');
+	free(path[0]);
+	free(path[1]);
+	free(path);
+}
+
 void	exec_cmnd(t_cmnd *t_cmd)
 {	
 	while (t_cmd)
 	{
-		if (t_cmd->next && t_cmd->next->is_input == 1 && !input(t_cmd->next))
-			break ;
-		if (is_executor(t_cmd->expand_cmnd))
+		get_paths();
+		if (!g_data.paths && !built_in_ctl(t_cmd->expand_cmnd_lower[0]))
+		{
+			printf("minishell: %s: No such file or directory\n", t_cmd->expand_cmnd[0]);
+			g_data.exit_status = 127;
+		}
+		else if (t_cmd->is_input == 1)
+		{
+			if (input(t_cmd))
+				break ;
+		}
+		else if (is_executor(t_cmd->expand_cmnd))
 			execute_run(t_cmd);
 		else if (t_cmd->is_input == 2)
 			execve_run(t_cmd, g_data.paths);

@@ -56,11 +56,11 @@ void	pipe_cntrl(t_lexer *t_lex)
 		;
 	else if (!t_lex->input[t_lex->i - 2])
 		;
-	else if (ft_strchr("<>|", t_lex->input[t_lex->i - 2]))
-		;
-	else if (!skip_space(t_lex->input, &t_lex->i) || \
-		ft_strchr("|<>", t_lex->input[t_lex->i]))
-		;
+	// else if (ft_strchr("<>|", t_lex->input[t_lex->i - 2]))
+	// 	;
+	// else if (!skip_space(t_lex->input, &t_lex->i) || \
+	// 	ft_strchr("|<>", t_lex->input[t_lex->i]))
+	// 	;
 	else
 	{
 		t_lex->count_token++;

@@ -22,16 +22,27 @@ void	lex_sep(t_lexer *t_lex)
 {
 	while (t_lex->input[t_lex->i])
 	{
+		printf("while enter\n");
 		while (t_lex->input[t_lex->i] && t_lex->input[t_lex->i] == ' ')
 			t_lex->i++;
 		if (t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"')
+		{
+			printf("ok\n");
 			quot_add(t_lex);
+			printf("ok1\n");
+		}
 		else if (t_lex->input[t_lex->i] && \
 				ft_strchr("<>|", t_lex->input[t_lex->i]))
+		{
+			printf("operator_add\n");
 			operator_add(t_lex);
+		}
 		else if (t_lex->input[t_lex->i] && \
 				!ft_strchr("< >|", t_lex->input[t_lex->i]))
-			cmnd_add(t_lex);
+			{
+				printf("cmnd_add\n");
+				cmnd_add(t_lex);
+			}
 	}
 	t_lex->token[t_lex->k] = NULL;
 	return ;
@@ -57,6 +68,7 @@ t_token	*lexer(void)
 		free(t_lex.token);
 		return (NULL);
 	}
+	printf("t_lex count: %d\n", t_lex.count_token);
 	t_lex.token = ft_calloc(sizeof(char *), t_lex.count_token + 1);
 	reset_ver(&t_lex);
 	t_lex.t_res = NULL;

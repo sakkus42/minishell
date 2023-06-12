@@ -130,7 +130,8 @@ void	print_export(char *str)
 void	do_export(char **cmnds)
 {
 	int	i;
-
+	
+	printf("is_invalid_arg:	%d\n", is_invalid_arg(cmnds));
 	if (is_invalid_arg(cmnds) != -1)
 	{
 		printf("minishell: export: `%s': not a valid identifier\n", cmnds[is_invalid_arg(cmnds)]);

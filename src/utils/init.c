@@ -19,10 +19,14 @@ static void	init_env(char **envp)
 
 void	init_program(char **envp)
 {
-	chdir(getenv("HOME"));
+	// chdir(getenv("HOME"));
 	getcwd(g_data.path, 4096);
 	init_env(envp);
-	g_data.paths = ft_split(getenv("PATH"), ':');
+	get_paths();
+	int index;
+	index = 0;
+	while (g_data.paths[index])
+		printf("paths: %s\n", g_data.paths[index++]);
 	g_data.input = malloc(sizeof(char **));
 	g_data.id = 0;
 	g_data.executor_flag = 0;

@@ -21,6 +21,7 @@ void	ctrl_c(int sig)
 		g_data.heredoc_flag = 0;
 	if (ttyname(g_data.id) && !g_data.executor_flag && !g_data.input_flag)
 		put_nl();
+	g_data.exit_status = 1;
 }
 
 void	sighandler_quit(int sig)

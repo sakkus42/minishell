@@ -8,15 +8,14 @@ void	dup2_scale(t_cmnd *t_cmd)
 		dup2(t_cmd->fd[1], 1);
 	}
 	else if (t_cmd->next && t_cmd->next->input_fd == -1)
+	{
+		printf("ok1071\n");
 		dup2(t_cmd->fd[1], 1);
+	}
 	else if (t_cmd->prev)
 		dup2(t_cmd->prev->fd[0], 0);
 	if (t_cmd->next && t_cmd->next->input_fd != -1)
-	{
 		dup2(t_cmd->next->input_fd, 0);
-		if (t_cmd->next->next && t_cmd->next->next->input_fd == -1)
-			dup2(t_cmd->next->fd[1], 1);
-	}
 }
 
 void	close_all(t_cmnd *t_cmd)
@@ -41,10 +40,7 @@ void	close_unnecessary_fd(t_cmnd *t_cmd)
 	else if (t_cmd->prev)
 		close(t_cmd->prev->fd[0]);
 	if (t_cmd->next && t_cmd->next->input_fd != -1)
-	{
-		if (t_cmd->next->next && t_cmd->next->next->input_fd == -1)
-			close(t_cmd->next->fd[1]);
-	}
+		close(t_cmd->next->input_fd);
 }
 
 void	wait_pid_all(t_cmnd *t_cmd)

@@ -4,8 +4,11 @@ void	next_to_quot(t_lexer *t_lex)
 {
 	while (t_lex->input[t_lex->i] && !ft_strchr("< \"'>|",
 			t_lex->input[t_lex->i]))
+		{
+			printf("ok1231\n");
 			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k],
 				t_lex->input[t_lex->i++]);
+		}
 }
 
 void	quot_add(t_lexer *t_lex)
@@ -22,8 +25,10 @@ void	quot_add(t_lexer *t_lex)
 	{
 		next_to_quot(t_lex);
 		while (t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"')
+		{
 			quot_from_quot(t_lex);
-		next_to_quot(t_lex);
+			next_to_quot(t_lex);
+		}
 		linked_add(t_lex, '"');
 		t_lex->k++;
 	}
@@ -64,7 +69,8 @@ void	cmnd_add(t_lexer *t_lex)
 		{
 			add_dolar(t_lex);
 		}
-		if (t_lex->input[t_lex->i] && t_lex->input[t_lex->i] != ' ')
+		if (t_lex->input[t_lex->i] && t_lex->input[t_lex->i] != ' ' &&\
+				!ft_strchr("< >|", t_lex->input[t_lex->i]))
 			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k],
 					t_lex->input[t_lex->i++]);
 	}

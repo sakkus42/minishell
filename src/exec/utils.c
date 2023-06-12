@@ -29,9 +29,13 @@ void	file_add(char **file, char **paths, t_cmnd *t_cmd)
 		*file = ft_strdup(t_cmd->expand_cmnd_lower[0]);
 		return ;
 	}
+	if (is_directory(t_cmd->expand_cmnd_lower[0] + 2) && is_executor(t_cmd->expand_cmnd) == 1)
+	{
+		printf("minishell: %s: is a directory\n", t_cmd->expand_cmnd[0]);
+		exit (126);
+	}
 	if (built_in_ctl(t_cmd->expand_cmnd_lower[0]))
 	{
-		printf("ok-builtin\n");
 		*file = NULL;
 		return ;
 	}
@@ -39,9 +43,7 @@ void	file_add(char **file, char **paths, t_cmnd *t_cmd)
 	{
 		printf("minishell: %s: No such file or directory\n",
 			t_cmd->expand_cmnd[0]);
-		g_data.exit_status = 127;
-		*file = NULL;
-		return ;
+		exit(127);
 	}
 	if (index != -1)
 		*file = add_path(index, t_cmd->expand_cmnd_lower[0], paths);
@@ -55,8 +57,11 @@ int	is_directory(char *expand_cmnd)
 
 	d = opendir(expand_cmnd);
 	if (d)
+	{
 		closedir(d);
-	return (d != NULL);
+		return (1);
+	}
+	return (0);
 }
 
 void	upper_to_lower(t_cmnd *t_cmd)

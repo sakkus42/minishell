@@ -74,6 +74,7 @@ void	ft_builtins(char **cmnd, char **cmnd_upper);
 void	upper_to_lower(t_cmnd *t_cmd);
 int		size_double(char **str);
 int		is_env(char *str);
+void	get_paths();
 t_token	*lexer();
 t_data 	g_data;
 
