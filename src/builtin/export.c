@@ -72,7 +72,6 @@ void	add_env_new(char *cmd)
 
 	len = size_env(g_data.env);
 	repeat_index = size_expand_len(cmd);
-	printf("len: %d\n", len);
 	if (repeat_index == -1)
 		tmp = malloc(sizeof(char *) * (len + 2));
 	else if (repeat_index == -2)
@@ -91,9 +90,7 @@ void	add_env_new(char *cmd)
 	}
 	tmp[i++] = ft_strdup(cmd);
 	tmp[i] = NULL;
-	printf("ok1\n");
 	free_double_pointer(&g_data.env);
-	printf("ok2\n");
 	g_data.env = tmp;
 }
 
@@ -130,8 +127,7 @@ void	print_export(char *str)
 void	do_export(char **cmnds)
 {
 	int	i;
-	
-	printf("is_invalid_arg:	%d\n", is_invalid_arg(cmnds));
+
 	if (is_invalid_arg(cmnds) != -1)
 	{
 		printf("minishell: export: `%s': not a valid identifier\n", cmnds[is_invalid_arg(cmnds)]);

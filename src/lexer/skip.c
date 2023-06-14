@@ -13,10 +13,17 @@ void	skip_operator(t_lexer *t_lex)
 
 void	skip_cmnd_arg(t_lexer *t_lex)
 {
+	int	is;
+
+	is = 0;
 	while (t_lex->input[t_lex->i])
 	{
-		if (ft_strchr(" <>|", t_lex->input[t_lex->i]))
+		if ((t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"') && !is)
+			is = t_lex->input[t_lex->i];
+		else if (ft_strchr(" <>|", t_lex->input[t_lex->i]) && !is)
 			break ;
+		else if (t_lex->input[t_lex->i] == is)
+			is = 0;
 		t_lex->i++;
 	}
 	t_lex->count_token++;

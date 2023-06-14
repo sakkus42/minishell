@@ -32,8 +32,11 @@ typedef struct s_cmnd
 	char	**cmnd_path;
 	int		is_input;
 	int		input_fd;
+	int		output_fd;
 	int		id;
 	int		fd[2];
+	int		context;
+	int		error_flag;
 	struct	s_cmnd *next;
 	struct	s_cmnd *prev;
 } t_cmnd;

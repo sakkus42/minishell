@@ -23,10 +23,6 @@ void	init_program(char **envp)
 	getcwd(g_data.path, 4096);
 	init_env(envp);
 	get_paths();
-	int index;
-	index = 0;
-	while (g_data.paths[index])
-		printf("paths: %s\n", g_data.paths[index++]);
 	g_data.input = malloc(sizeof(char **));
 	g_data.id = 0;
 	g_data.executor_flag = 0;

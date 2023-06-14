@@ -2,6 +2,12 @@
 # define EXEC_H
 # include "../../include/minishell.h"
 
+typedef struct s_pipe{
+	int	fd[2];
+	struct s_pipe *next;
+	struct s_pipe *prev;
+}	t_pip;
+
 int		is_executor(char **expand_cmd);
 int		get_size_t_cmd(t_cmnd *t_cmd);
 int		is_directory(char *expand_cmnd);

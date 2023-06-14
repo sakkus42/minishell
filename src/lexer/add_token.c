@@ -5,7 +5,6 @@ void	next_to_quot(t_lexer *t_lex)
 	while (t_lex->input[t_lex->i] && !ft_strchr("< \"'>|",
 			t_lex->input[t_lex->i]))
 		{
-			printf("ok1231\n");
 			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k],
 				t_lex->input[t_lex->i++]);
 		}
@@ -61,10 +60,7 @@ void	cmnd_add(t_lexer *t_lex)
 		&& !ft_strchr("< >|", t_lex->input[t_lex->i]))
 	{
 		while (t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"')
-		{
-			t_lex->tmp = t_lex->input[t_lex->i];
 			quot_from_quot(t_lex);
-		}
 		if (t_lex->input[t_lex->i] == '$')
 		{
 			add_dolar(t_lex);

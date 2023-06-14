@@ -23,7 +23,7 @@ void	ft_cd(char *dest, char *old_dir)
 		if (!key)
 			printf("minishell : HOME not set\n");
 		if (chdir(key) == -1)
-			printf("çalişmadi\n");
+			printf("error chdir\n");
 		free(key);
 	}
 	else

@@ -1,17 +1,17 @@
 #include "../include/minishell.h"
 
-void	ctrl_d(void)
-{
-	write(1, "exit\n", 5);
-	exit(0);
-}
-
 void	put_nl(void)
 {
 	printf("\033[A");
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	rl_on_new_line();
 	g_data.is = 1;
+}
+
+void	ctrl_d(void)
+{
+	write(1, "exit\n", 5);
+	exit(0);
 }
 
 void	ctrl_c(int sig)

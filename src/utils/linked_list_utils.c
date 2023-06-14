@@ -51,6 +51,7 @@ void	ft_print_struct(t_cmnd *t_cmd)
 	while (t_cmd)
 	{
 		i = 0;
+		printf("context: %d\n", t_cmd->context);
 		while (t_cmd->expand_cmnd[i])
 			printf("%s ", t_cmd->expand_cmnd[i++]);
 		printf("\n");

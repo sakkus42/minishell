@@ -81,7 +81,6 @@ void	ft_unset2(char *str)
 	int		k;
 
 	tmp = malloc(sizeof(char *) * (size_env(g_data.env)));
-	printf("g_Data.env size:	%d\n", size_env(g_data.env));
 	i = 0;
 	k = 0;
 	while (g_data.env[i])
@@ -96,7 +95,6 @@ void	ft_unset2(char *str)
 		free(env);
 		tmp[k++] = ft_strdup(g_data.env[i++]);
 	}
-	printf("k: %d\n", k);
 	tmp[k] = NULL;
 	free_double_pointer(&g_data.env);
 	g_data.env = tmp;

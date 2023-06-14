@@ -26,7 +26,10 @@ void	execve_run(t_cmnd *t_cmd, char **paths)
 			ft_builtins(t_cmd->expand_cmnd_lower, t_cmd->expand_cmnd);
 		else if (execve(file, t_cmd->expand_cmnd, g_data.env) == -1 && \
 				!is_executor(t_cmd->expand_cmnd))
-			printf("minishell: %s: command not found\n", t_cmd->expand_cmnd[0]);
+		{
+			t_cmd->error_flag = 1;
+			exit(127);
+		}
 		exit(0);
 	}
 	close_unnecessary_fd(t_cmd);
@@ -66,7 +69,6 @@ void	get_paths()
 		free(g_data.paths);
 	}
 	index = is_env("PATH");
-	printf("index:	%d\n", index);
 	if (index == -1)
 	{
 		g_data.paths = NULL;
@@ -79,9 +81,31 @@ void	get_paths()
 	free(path);
 }
 
-void	exec_cmnd(t_cmnd *t_cmd)
-{	
+int	input_output(t_cmnd *t_cmd)
+{
 	while (t_cmd)
+	{
+		if (t_cmd->is_input == 1)
+		{
+			if (input(t_cmd))
+				return (0);
+		}
+		else if (t_cmd->is_input == 0 && t_cmd)
+		{
+			output(t_cmd);
+		}
+		t_cmd = t_cmd->next;
+	}
+	return (1);
+}
+
+void	exec_cmnd(t_cmnd *t_cmd)
+{
+	int		is;
+
+	printf("g_data.pipe_count: %d\n", g_data.pipe_count);
+	is = input_output(g_data.t_cmnd);
+	while (t_cmd && is && !g_data.heredoc_flag)
 	{
 		get_paths();
 		if (!g_data.paths && !built_in_ctl(t_cmd->expand_cmnd_lower[0]))
@@ -89,19 +113,14 @@ void	exec_cmnd(t_cmnd *t_cmd)
 			printf("minishell: %s: No such file or directory\n", t_cmd->expand_cmnd[0]);
 			g_data.exit_status = 127;
 		}
-		else if (t_cmd->is_input == 1)
-		{
-			if (input(t_cmd))
-				break ;
-		}
 		else if (is_executor(t_cmd->expand_cmnd))
 			execute_run(t_cmd);
 		else if (t_cmd->is_input == 2)
 			execve_run(t_cmd, g_data.paths);
-		else if (t_cmd->is_input == 0)
-			output(t_cmd);
 		t_cmd = t_cmd->next;
 	}
 	wait_pid_all(g_data.t_cmnd);
 	close_all(g_data.t_cmnd);
+	if (!is)
+		g_data.exit_status = 1;
 }

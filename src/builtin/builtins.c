@@ -36,6 +36,20 @@ void	n_ctl(char **arg, int i)
 	}
 }
 
+int	is_n(char *arg)
+{
+	int i;
+
+	i = 2;
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	ft_echo(char **arg)
 {
 	int	i;
@@ -46,24 +60,24 @@ void	ft_echo(char **arg)
 		printf("\n");
 		return ;
 	}
-	while (ft_strcmp(arg[i], "-n") == 0)
-		if (!arg[i])
-			return ;
-		else
-			i++;
-	i--;
-	while (arg[i++])
+	while (arg[i])
 	{
+		if (arg[i][0] == '-' && arg[i][1] == 'n' && is_n(arg[i]))
+		{
+			i++;
+			continue ;
+		}
 		printf("%s", arg[i]);
 		if (arg[i + 1] != NULL)
 			printf(" ");
-		else if (!ft_strcmp(arg[0], "-n"))
+		else if (arg[0][0] == '-' && arg[0][1] == 'n' && is_n(arg[0]))
 			break ;
 		else
 		{
 			printf("\n");
 			break ;
 		}
+		i++;
 	}
 }
 
@@ -94,6 +108,12 @@ void	ft_builtins(char **cmnd, char **cmnd_upper)
 			nbr = getting_number_in_exit(cmnd[1]);
 			if (nbr == 0)
 				nbr = ft_atoi(cmnd[1]);
+		}
+		if (cmnd[1] && cmnd[2])
+		{
+			g_data.exit_status = 1;
+			printf("minishell: exit: too many arguments\n");
+			return ;
 		}
 		exit(nbr);
 	}
