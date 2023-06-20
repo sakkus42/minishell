@@ -1,54 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 15:28:34 by sakkus            #+#    #+#             */
+/*   Updated: 2023/06/20 12:52:58 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
-
-int	count_cmnd(t_token *t_token)
-{
-	int	count;
-
-	count = 0;
-	if (t_token->if_red)
-	{
-		t_token = t_token->next->next;
-		count += 2;
-		return (count);
-	}
-	while (t_token)
-	{
-		if (!t_token->if_pipe && !t_token->if_red)
-			count++;
-		else
-			break ;
-		t_token = t_token->next;
-	}
-	return (count);
-}
-
-t_cmnd	*new_node(int count_cmnd, t_cmnd *t_prev)
-{
-	t_cmnd	*t_res;
-	t_res = malloc(sizeof(t_cmnd));
-	// printf("count_cmnd + 1: %d\n", count_cmnd + 1);
-	t_res->expand_cmnd = malloc(sizeof(char *) * (count_cmnd + 1));
-	t_res->expand_cmnd_lower = malloc(sizeof(char *) * (count_cmnd + 1));
-	t_res->expand_cmnd[count_cmnd] = NULL;
-	t_res->expand_cmnd_lower[count_cmnd] = NULL;
-	t_res->input_fd = -1;
-	t_res->output_fd = -1;
-	t_res->error_flag = 0;
-	t_res->id = -1;
-	pipe(t_res->fd);
-	t_res->next = NULL;
-	t_res->prev = t_prev;
-	return (t_res);
-}
-
-int	is_input(char *c)
-{
-	if (ft_strchr(c, '>'))
-		return (0);
-	else if (ft_strchr(c, '<'))
-		return (1);
-	return (2);
-}
 
 t_token	*split_pipe2(t_token *t_token, t_cmnd *t_tmp, int i)
 {
@@ -63,48 +25,45 @@ t_token	*split_pipe2(t_token *t_token, t_cmnd *t_tmp, int i)
 	return (t_token);
 }
 
+t_token	*split_pipe3(t_token *t_token, t_cmnd **t_tmp, int *context, int *i)
+{
+	if (t_token->if_pipe)
+	{
+		(*context)++;
+		t_token = t_token->next;
+	}
+	if (!t_token->if_pipe && !t_token->if_red)
+	{
+		(*t_tmp) = new_node(count_cmnd(t_token), *t_tmp);
+		(*t_tmp)->is_input = 2;
+		(*t_tmp)->context = (*context);
+	}
+	else if (t_token->if_red)
+	{
+		(*t_tmp) = new_node(count_cmnd(t_token), *t_tmp);
+		(*t_tmp)->expand_cmnd[*i] = t_token->cmnd[0];
+		(*t_tmp)->expand_cmnd_lower[(*i)++] = ft_strdup(t_token->cmnd[0]);
+		(*t_tmp)->is_input = is_input(t_token->cmnd[0]);
+		(*t_tmp)->context = (*context);
+		t_token = t_token->next;
+	}
+	return (t_token);
+}
+
 void	split_pipe(t_token *t_token, t_cmnd **t_cmd)
 {
 	t_cmnd	*t_tmp;
-	int		i;
 	int		context;
+	int		i;
 
 	context = 0;
 	t_tmp = NULL;
 	while (t_token)
 	{
 		i = 0;
-		if (t_token->if_pipe)
-		{
-			context++;
-			t_token = t_token->next;
-		}
-		if (!t_token->if_pipe && !t_token->if_red)
-		{
-			t_tmp = new_node(count_cmnd(t_token), t_tmp);
-			t_tmp->is_input = 2;
-			t_tmp->context = context;
-		}
-		else if (t_token->if_red)
-		{
-			t_tmp = new_node(count_cmnd(t_token), t_tmp);
-			t_tmp->expand_cmnd[i] = t_token->cmnd[0];
-			t_tmp->expand_cmnd_lower[i++] = ft_strdup(t_token->cmnd[0]);
-			t_tmp->is_input = is_input(t_token->cmnd[0]);
-			t_tmp->context = context;
-			t_token = t_token->next;
-		}
+		t_token = split_pipe3(t_token, &t_tmp, &context, &i);
 		t_token = split_pipe2(t_token, t_tmp, i);
 		ft_lstadd_back_t_cmnd(t_cmd, t_tmp);
-	}
-}
-
-void	printf_token(t_token *t_token)
-{
-	while (t_token)
-	{
-		printf("token: %s\n", t_token->cmnd[0]);
-		t_token = t_token->next;
 	}
 }
 
@@ -112,7 +71,6 @@ void	parser(void)
 {
 	g_data.pipe_count = 0;
 	g_data.t_token = lexer();
-	// printf_token(g_data.t_token);
 	if (!g_data.t_token)
 	{
 		g_data.t_cmnd = NULL;
@@ -120,5 +78,4 @@ void	parser(void)
 	}
 	split_pipe(g_data.t_token, &(g_data.t_cmnd));
 	upper_to_lower(g_data.t_cmnd);
-	ft_print_struct(g_data.t_cmnd);
 }

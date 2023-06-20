@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 15:29:09 by sakkus            #+#    #+#             */
+/*   Updated: 2023/06/20 10:55:22 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 static void	init_env(char **envp)
@@ -19,7 +31,7 @@ static void	init_env(char **envp)
 
 void	init_program(char **envp)
 {
-	// chdir(getenv("HOME"));
+	chdir(getenv("HOME"));
 	getcwd(g_data.path, 4096);
 	init_env(envp);
 	get_paths();

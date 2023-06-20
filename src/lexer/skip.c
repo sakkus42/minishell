@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   skip.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 15:28:37 by sakkus            #+#    #+#             */
+/*   Updated: 2023/06/15 15:28:38 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 
 void	skip_operator(t_lexer *t_lex)
@@ -18,7 +30,8 @@ void	skip_cmnd_arg(t_lexer *t_lex)
 	is = 0;
 	while (t_lex->input[t_lex->i])
 	{
-		if ((t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"') && !is)
+		if ((t_lex->input[t_lex->i] == '\''
+				|| t_lex->input[t_lex->i] == '"') && !is)
 			is = t_lex->input[t_lex->i];
 		else if (ft_strchr(" <>|", t_lex->input[t_lex->i]) && !is)
 			break ;

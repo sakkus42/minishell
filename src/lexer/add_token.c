@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   add_token.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 15:28:18 by sakkus            #+#    #+#             */
+/*   Updated: 2023/06/20 10:28:47 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 
 void	next_to_quot(t_lexer *t_lex)
 {
 	while (t_lex->input[t_lex->i] && !ft_strchr("< \"'>|",
 			t_lex->input[t_lex->i]))
-		{
-			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k],
+	{
+		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k],
 				t_lex->input[t_lex->i++]);
-		}
+	}
 }
 
 void	quot_add(t_lexer *t_lex)
@@ -62,11 +74,9 @@ void	cmnd_add(t_lexer *t_lex)
 		while (t_lex->input[t_lex->i] == '\'' || t_lex->input[t_lex->i] == '"')
 			quot_from_quot(t_lex);
 		if (t_lex->input[t_lex->i] == '$')
-		{
 			add_dolar(t_lex);
-		}
-		if (t_lex->input[t_lex->i] && t_lex->input[t_lex->i] != ' ' &&\
-				!ft_strchr("< >|", t_lex->input[t_lex->i]))
+		if (t_lex->input[t_lex->i] && t_lex->input[t_lex->i] != ' ' && \
+				!ft_strchr("< $>|", t_lex->input[t_lex->i]))
 			t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k],
 					t_lex->input[t_lex->i++]);
 	}

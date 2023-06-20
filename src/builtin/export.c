@@ -3,42 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:57:05 by ydegerli          #+#    #+#             */
-/*   Updated: 2023/06/09 14:42:33 by ydegerli         ###   ########.fr       */
+/*   Updated: 2023/06/20 11:14:13 by sakkus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-int		size_env(char **env)
-{
-	int	res;
-
-	res = 0;
-	while (env[res])
-		res++;
-	return (res);
-}
-
 int	repeat_index(char *env_name, char *cmd)
 {
-	char 	*env;
+	char	*env;
 	int		i;
 
 	i = 0;
 	while (g_data.env[i])
 	{
 		if (ft_strchr(g_data.env[i], '='))
-			env = ft_substr(g_data.env[i], 0, ft_strchr(g_data.env[i], '=') - g_data.env[i]); 
+			env = ft_substr(g_data.env[i],
+					0, ft_strchr(g_data.env[i], '=') - g_data.env[i]);
 		else
 			env = ft_strdup(g_data.env[i]);
 		if (!ft_strcmp(env, env_name))
 		{
 			free(env);
 			if ((ft_strchr(g_data.env[i], '=') && ft_strchr(cmd, '='))
-					|| !ft_strchr(g_data.env[i], '='))
+				|| !ft_strchr(g_data.env[i], '='))
 				return (i);
 			else
 				return (-2);
@@ -49,25 +40,26 @@ int	repeat_index(char *env_name, char *cmd)
 	return (-1);
 }
 
-int size_expand_len(char *cmd)
+void	add_env_new2(char *cmd, char **tmp)
 {
-	int		res;
-	char	*env_name;
+	int	i;
 
-	if (ft_strchr(cmd, '='))
-		env_name = ft_substr(cmd, 0, ft_strchr(cmd, '=') - cmd);
-	else
-		env_name = ft_strdup(cmd);
-	res = repeat_index(env_name, cmd);
-	free(env_name);
-	return (res);
+	i = 0;
+	while (g_data.env[i])
+	{
+		tmp[i] = ft_strdup(g_data.env[i]);
+		i++;
+	}
+	tmp[i++] = ft_strdup(cmd);
+	tmp[i] = NULL;
+	free_double_pointer(&g_data.env);
+	g_data.env = tmp;
 }
 
 void	add_env_new(char *cmd)
 {
 	char	**tmp;
 	int		len;
-	int		i;
 	int		repeat_index;
 
 	len = size_env(g_data.env);
@@ -82,16 +74,7 @@ void	add_env_new(char *cmd)
 		g_data.env[repeat_index] = ft_strdup(cmd);
 		return ;
 	}
-	i = 0;
-	while (g_data.env[i])
-	{
-		tmp[i] = ft_strdup(g_data.env[i]);
-		i++;
-	}
-	tmp[i++] = ft_strdup(cmd);
-	tmp[i] = NULL;
-	free_double_pointer(&g_data.env);
-	g_data.env = tmp;
+	add_env_new2(cmd, tmp);
 }
 
 void	print_export(char *str)
@@ -117,21 +100,21 @@ void	print_export(char *str)
 			k++;
 		}
 		if (g_data.env[i][k - 1] == '=')
-				printf("\"");
+			printf("\"");
 		printf("\n");
 		i++;
 	}
-	
 }
 
-void	do_export(char **cmnds)
+int	do_export(char **cmnds)
 {
 	int	i;
 
 	if (is_invalid_arg(cmnds) != -1)
 	{
-		printf("minishell: export: `%s': not a valid identifier\n", cmnds[is_invalid_arg(cmnds)]);
-		return ;
+		printf("minishell: export: `%s': not a valid identifier\n",
+			cmnds[is_invalid_arg(cmnds)]);
+		return (1);
 	}
 	if (!cmnds[1])
 		print_export("declare -x ");
@@ -141,4 +124,5 @@ void	do_export(char **cmnds)
 		while (cmnds[i])
 			add_env_new(cmnds[i++]);
 	}
+	return (0);
 }

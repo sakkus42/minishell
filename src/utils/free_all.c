@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_all.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 15:29:03 by sakkus            #+#    #+#             */
+/*   Updated: 2023/06/19 14:23:44 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 void	free_token(t_token *t_tok)
@@ -11,6 +23,18 @@ void	free_token(t_token *t_tok)
 		free(t_tok->cmnd);
 		free(t_tok);
 		t_tok = t_tmp;
+	}
+}
+
+void	free_pipe(t_pip	*pip)
+{
+	t_pip	*tmp;
+
+	while (pip)
+	{
+		tmp = pip->next;
+		free(pip);
+		pip = tmp;
 	}
 }
 

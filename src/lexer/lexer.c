@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 15:28:26 by sakkus            #+#    #+#             */
+/*   Updated: 2023/06/15 15:28:28 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 
 static void	count_token(t_lexer *t_lex)
@@ -31,7 +43,7 @@ void	lex_sep(t_lexer *t_lex)
 			operator_add(t_lex);
 		else if (t_lex->input[t_lex->i] && \
 				!ft_strchr("< >|", t_lex->input[t_lex->i]))
-				cmnd_add(t_lex);
+			cmnd_add(t_lex);
 	}
 	t_lex->token[t_lex->k] = NULL;
 	return ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydegerli <ydegerli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 17:00:17 by ydegerli          #+#    #+#             */
-/*   Updated: 2023/06/09 14:37:29 by ydegerli         ###   ########.fr       */
+/*   Updated: 2023/06/20 12:36:16 by sakkus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,27 @@ char	*get_env(char *key);
 void	free_double_pointer(char ***str);
 void	ft_echo(char **arg);
 void	n_ctl(char **arg, int i);
-void	ft_cd(char *dest, char *old_dir);
+int		ft_cd(char *dest, char *old_dir);
 void	set_tmp(char **tmp, int *i);
 void	set_pwds(char *old_dir, int find);
 void	update_env_pwds(char *old_dir);
 void	update_env(char *keyval, int state);
 void	add_env_success(char *keyval, char ***tmp, int *i);
 void	set_keys(char *keyval, int *find, int *i);
-void	do_export(char **str);
+int		do_export(char **str);
 void	print_export(char *str);
 void	set_key_and_value(char **key, char **value, int *i);
 void	print_env(char **str);
-void	ft_unset(char **str);
+int		ft_unset(char **str);
+void	ft_echo(char **arg);
 int		getting_number_in_exit(char *str);
-int		first_ltter(char *str);
 int		ft_chrcmp(char c1, char c2);
-void	var_chck(char *str);
-void	do_export(char **cmnds);
 void	add_env(char *keyval, char **tmp, int find);
 int		repeat_index(char *env_name, char *cmd);
 int		size_env(char **env);
 int		is_invalid_arg(char **str);
-
+int		size_expand_len(char *cmd);
+int		is_env(char *str);
+void	exit_func(char **cmnd);
+char	*env_name(int i);
 #endif

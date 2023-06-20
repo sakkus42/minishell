@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input_output.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 15:28:11 by sakkus            #+#    #+#             */
+/*   Updated: 2023/06/20 10:48:01 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "exec.h"
 
 int	open_flag(t_cmnd *t_cmd)
@@ -10,7 +22,7 @@ int	open_flag(t_cmnd *t_cmd)
 int	input(t_cmnd *t_cmd)
 {
 	if (!ft_strcmp(t_cmd->expand_cmnd[0], "<") && !access(t_cmd->expand_cmnd[1],
-		F_OK))
+			F_OK))
 	{
 		t_cmd->fd[0] = open(t_cmd->expand_cmnd_lower[1], open_flag(t_cmd));
 		if (t_cmd->fd[0] == -1)
@@ -27,7 +39,8 @@ int	input(t_cmnd *t_cmd)
 	}
 	else
 	{
-		printf("minishell: %s: No such file or directory\n", t_cmd->expand_cmnd[1]);
+		printf("minishell: %s: No such file or directory\n",
+			t_cmd->expand_cmnd[1]);
 		return (1);
 	}
 	return (0);
@@ -46,6 +59,8 @@ void	heredoc(t_cmnd *t_cmd)
 		g_data.input[0] = readline(">");
 		if (!g_data.heredoc_flag || !g_data.input[0])
 		{
+			if (g_data.input)
+				free(g_data.input[0]);
 			g_data.heredoc_flag = 1;
 			return ;
 		}
@@ -59,16 +74,42 @@ void	heredoc(t_cmnd *t_cmd)
 	close(t_cmd->fd[1]);
 }
 
-void	output(t_cmnd *t_cmd)
+int	output(t_cmnd *t_cmd)
 {
+	if (!t_cmd->expand_cmnd[1])
+	{
+		printf("minishell: ambiguous redirect\n");
+		return (1);
+	}
 	if (!ft_strncmp(t_cmd->expand_cmnd[0], ">",
 			ft_strlen(t_cmd->expand_cmnd[0]))
 		&& !access(t_cmd->expand_cmnd[1], F_OK))
 		unlink(t_cmd->expand_cmnd[1]);
-	t_cmd->fd[1] = open(t_cmd->expand_cmnd[1], O_CREAT | O_RDWR | O_APPEND, 0777);
+	t_cmd->fd[1] = open(t_cmd->expand_cmnd[1],
+			O_CREAT | O_RDWR | O_APPEND, 0777);
 	if (t_cmd->fd[1] == -1)
 	{
 		printf("Minishell: %s: Permission denied\n", t_cmd->expand_cmnd[1]);
-		return ;
+		return (1);
 	}
+	return (0);
+}
+
+int	input_output(t_cmnd *t_cmd)
+{
+	while (t_cmd)
+	{
+		if (t_cmd->is_input == 1)
+		{
+			if (input(t_cmd))
+				return (0);
+		}
+		else if (t_cmd->is_input == 0 && t_cmd)
+		{
+			if (output(t_cmd))
+				return (0);
+		}
+		t_cmd = t_cmd->next;
+	}
+	return (1);
 }

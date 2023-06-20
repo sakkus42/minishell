@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   add_dolar.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 15:27:18 by sakkus            #+#    #+#             */
+/*   Updated: 2023/06/20 10:42:40 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 
 static void	add_dolar2(t_lexer *t_lex);
@@ -12,11 +24,25 @@ static void	add_env_value2(t_lexer *t_lex, char *env_value)
 		, env_value[i++]);
 }
 
+static char	*add_env_value3(char *env_name, int i)
+{
+	char	**hay;
+	char	*res;
+
+	res = NULL;
+	hay = ft_split(g_data.env[i], '=');
+	if (ft_strnstr(hay[0], env_name, ft_strlen(env_name)))
+		res = ft_strdup(hay[1]);
+	free(hay[0]);
+	free(hay[1]);
+	free(hay);
+	return (res);
+}
+
 static void	add_env_value(t_lexer *t_lex, char *env_name)
 {
 	char	*env_value;
 	int		i;
-	char	**hay;
 
 	i = 0;
 	env_value = 0;
@@ -27,12 +53,7 @@ static void	add_env_value(t_lexer *t_lex, char *env_name)
 			i++;
 			continue ;
 		}
-		hay = ft_split(g_data.env[i], '=');
-		if (ft_strnstr(hay[0], env_name, ft_strlen(env_name)))
-			env_value = ft_strdup(hay[1]);
-		free(hay[0]);
-		free(hay[1]);
-		free(hay);
+		env_value = add_env_value3(env_name, i);
 		if (env_value)
 			break ;
 		i++;
@@ -48,6 +69,8 @@ void	add_dolar(t_lexer *t_lex)
 	char	*tmp;
 	char	*exit_status;
 
+	while (t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i + 1] == '$')
+		t_lex->i++;
 	if (t_lex->input[t_lex->i + 1] && t_lex->input[t_lex->i + 1] == '?')
 	{
 		t_lex->i += 2;
@@ -58,7 +81,11 @@ void	add_dolar(t_lexer *t_lex)
 		free(exit_status);
 	}
 	else if (!t_lex->input[t_lex->i + 1])
+	{
+		t_lex->token[t_lex->k] = ft_str_cat(t_lex->token[t_lex->k], '$');
+		t_lex->i++;
 		return ;
+	}
 	else
 		add_dolar2(t_lex);
 }
@@ -71,7 +98,7 @@ static void	add_dolar2(t_lexer *t_lex)
 
 	i = t_lex->i + 1;
 	count = 0;
-	while (t_lex->input[i] && !ft_strchr(" |<>\"'=", t_lex->input[i]))
+	while (t_lex->input[i] && !ft_strchr(" $|<>\"'=", t_lex->input[i]))
 	{
 		count++;
 		i++;
@@ -80,7 +107,7 @@ static void	add_dolar2(t_lexer *t_lex)
 	env_name[count] = '\0';
 	i = t_lex->i + 1;
 	count = 0;
-	while (t_lex->input[i] && !ft_strchr(" |<>\"'=", t_lex->input[i]))
+	while (t_lex->input[i] && !ft_strchr(" $|<>\"'=", t_lex->input[i]))
 		env_name[count++] = t_lex->input[i++];
 	t_lex->i = i;
 	add_env_value(t_lex, env_name);

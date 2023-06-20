@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakkus <sakkus@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/15 15:28:13 by sakkus            #+#    #+#             */
+/*   Updated: 2023/06/20 11:01:36 by sakkus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "exec.h"
 
 int	is_executor(char **expand_cmd)
@@ -10,30 +22,8 @@ int	is_executor(char **expand_cmd)
 		return (0);
 }
 
-int	get_size_t_cmd(t_cmnd *t_cmd)
+void	file_add2(char **file, char **paths, t_cmnd *t_cmd, int index)
 {
-	if (!t_cmd)
-		return (0);
-	return (1 + get_size_t_cmd(t_cmd->next));
-}
-
-void	file_add(char **file, char **paths, t_cmnd *t_cmd)
-{
-	int	index;
-	index = find_dir(paths, t_cmd->expand_cmnd_lower[0]);
-	if (is_executor(t_cmd->expand_cmnd) == 1)
-		index = find_dir(paths, t_cmd->expand_cmnd_lower[0] + 2);
-	else if (is_executor(t_cmd->expand_cmnd) == 2 && \
-			!access(t_cmd->expand_cmnd_lower[0], X_OK))
-	{
-		*file = ft_strdup(t_cmd->expand_cmnd_lower[0]);
-		return ;
-	}
-	if (is_directory(t_cmd->expand_cmnd_lower[0] + 2) && is_executor(t_cmd->expand_cmnd) == 1)
-	{
-		printf("minishell: %s: is a directory\n", t_cmd->expand_cmnd[0]);
-		exit (126);
-	}
 	if (built_in_ctl(t_cmd->expand_cmnd_lower[0]))
 	{
 		*file = NULL;
@@ -49,6 +39,28 @@ void	file_add(char **file, char **paths, t_cmnd *t_cmd)
 		*file = add_path(index, t_cmd->expand_cmnd_lower[0], paths);
 	else
 		*file = NULL;
+}
+
+void	file_add(char **file, char **paths, t_cmnd *t_cmd)
+{
+	int	index;
+
+	index = find_dir(paths, t_cmd->expand_cmnd_lower[0]);
+	if (is_executor(t_cmd->expand_cmnd) == 1)
+		index = find_dir(paths, t_cmd->expand_cmnd_lower[0] + 2);
+	else if (is_executor(t_cmd->expand_cmnd) == 2 && \
+			!access(t_cmd->expand_cmnd_lower[0], X_OK))
+	{
+		*file = ft_strdup(t_cmd->expand_cmnd_lower[0]);
+		return ;
+	}
+	if (is_directory(t_cmd->expand_cmnd_lower[0] + 2)
+		&& is_executor(t_cmd->expand_cmnd) == 1)
+	{
+		printf("minishell: %s: is a directory\n", t_cmd->expand_cmnd[0]);
+		exit (126);
+	}
+	file_add2(file, paths, t_cmd, index);
 }
 
 int	is_directory(char *expand_cmnd)
